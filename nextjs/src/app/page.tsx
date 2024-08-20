@@ -128,7 +128,7 @@ export default async function HomePlayerList() {
                   </div>
                   <div className={styles["home-player-row-tags"]}>
                     {player.tags &&
-                      player.tags.map((tag) => (
+                      player.tags.map((tag: any) => (
                         <div className={"badge grey"} key={tag.name}>
                           {tag.name}
                         </div>

@@ -5,3 +5,6 @@
 4. Write game data and player rating data to database
 5. Writing game data also requires writing the GameTag relationships
 6. Pull game artwork and upload to S3
+
+## Stretch goals
+1. Automatically pull hours played per player for their games from Steam profile
