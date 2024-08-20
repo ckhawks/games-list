@@ -1,0 +1,18 @@
+{
+  "players": [
+    {
+      "name": "Stellaric",
+      "id": "1305cca2-c600-4e0b-a29e-acf7c759e94d",
+      "bio": "hello!",
+      "ratings": {
+        "10": [
+          {
+            "game": "Factorio",
+            "appId": "",
+            "blurb": "send monkey to space"
+          }
+        ]
+      }
+    }
+  ]
+}

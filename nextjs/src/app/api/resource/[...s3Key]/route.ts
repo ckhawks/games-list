@@ -6,17 +6,19 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { s3Key: string } }
+  { params }: { params: { s3Key: string[] } }
 ) {
-  if (params.s3Key === null) {
+  if (params.s3Key.length === 0) {
     return new NextResponse("Please provide an id.", { status: 404 });
   }
 
+  const objectPath = params.s3Key.join("/");
   try {
     const s3Client = getS3Client();
     const getObjectCommand = new GetObjectCommand({
       Bucket: process.env.MC_AWS_S3_BUCKET,
-      Key: params.s3Key,
+      Region: process.env.MC_AWS_S3_REGION,
+      Key: objectPath,
     } as GetObjectCommandInput);
 
     const data = await s3Client.send(getObjectCommand);

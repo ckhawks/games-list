@@ -4,13 +4,9 @@ import { Image, Row } from "react-bootstrap";
 import styles from "../page.module.scss";
 import BackButton from "@/components/BackButton";
 import Link from "next/link";
-import {
-  Clock,
-  ExternalLink,
-  Link as LinkIcon,
-  ShoppingCart,
-  Star,
-} from "react-feather";
+import { Clock, ExternalLink, ShoppingCart, Star } from "react-feather";
+import { db } from "@/util/db/db";
+import { redirect } from "next/navigation";
 
 const player = {
   username: "Stellaric",
@@ -20,7 +16,7 @@ const player = {
   <li>Competitive fast mechanical-gameplay games</li>
   <li>Casual fun with friends party-esque games</li>
   </ul>
-  
+
   I&apos;m also pretty bad at categorizing and rating and trying to be objective... so take my numbers with a grain of salt. If I have a lot of hours ins something, I probably enjoy it.`,
   games: [
     {
@@ -71,6 +67,20 @@ export default async function PlayerListPage({
     return <>404</>;
   }
 
+  const playerSearch = await db(
+    `
+    SELECT * FROM "Player"
+    WHERE LOWER(username) = $1`,
+    [params.username]
+  );
+
+  if (playerSearch.length != 1) {
+    redirect("/");
+    return <>404</>;
+  }
+
+  // const player = playerSearch[0];
+
   const usernameLowered = params.username.toLowerCase();
 
   // search DB for username lower()
@@ -82,7 +92,7 @@ export default async function PlayerListPage({
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <h1>{player.username}&apos;s Games</h1>
             <span style={{ color: "var(--sub-text-color)" }}>
-              Last updated {player.listLastUpdatedAt}
+              Last updated {player.listLastUpdatedAt.toString()}
             </span>
           </div>
           <p>{player.profileBlurb}</p>

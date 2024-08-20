@@ -1,68 +1,85 @@
-import Image from "next/image";
+"use server";
+
 import styles from "./page.module.scss";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Col, Row } from "react-bootstrap";
 import { ArrowRight } from "react-feather";
 import Link from "next/link";
+import { db } from "@/util/db/db";
+import { getTag } from "@/constants/tags";
 
-const players = [
-  {
-    username: "Stellaric",
-    avatarS3Key: "/avatars/stellaric.png",
-    tags: [
-      {
-        name: "Automation",
-      },
-      {
-        name: "Base-building",
-      },
-      {
-        name: "Competitive",
-      },
-      {
-        name: "First-person Shooter",
-      },
-    ],
-  },
-  {
-    username: "Nrohgnol",
-    avatarS3Key: "/avatars/nrohgnol.png",
-    tags: [
-      {
-        name: "Automation",
-      },
-      {
-        name: "Base-building",
-      },
-      {
-        name: "Competitive",
-      },
-      {
-        name: "First-person Shooter",
-      },
-    ],
-  },
-  {
-    username: "DeadNotSleeping",
-    avatarS3Key: "/avatars/deadnotsleeping.png",
-    tags: [
-      {
-        name: "Automation",
-      },
-      {
-        name: "Base-building",
-      },
-      {
-        name: "Competitive",
-      },
-      {
-        name: "First-person Shooter",
-      },
-    ],
-  },
-];
+// const players = [
+//   {
+//     username: "Stellaric",
+//     avatarS3Key: "/avatars/stellaric.png",
+//     tags: [
+//       {
+//         name: "Automation",
+//       },
+//       {
+//         name: "Base-building",
+//       },
+//       {
+//         name: "Competitive",
+//       },
+//       {
+//         name: "First-person Shooter",
+//       },
+//     ],
+//   },
+//   {
+//     username: "Nrohgnol",
+//     avatarS3Key: "/avatars/nrohgnol.jpeg",
+//     tags: [
+//       {
+//         name: "Automation",
+//       },
+//       {
+//         name: "Base-building",
+//       },
+//       {
+//         name: "Competitive",
+//       },
+//       {
+//         name: "First-person Shooter",
+//       },
+//     ],
+//   },
+//   {
+//     username: "DeadNotSleeping",
+//     avatarS3Key: "/avatars/deadnotsleeping.jpeg",
+//     tags: [
+//       {
+//         name: "Automation",
+//       },
+//       {
+//         name: "Base-building",
+//       },
+//       {
+//         name: "Competitive",
+//       },
+//       {
+//         name: "First-person Shooter",
+//       },
+//     ],
+//   },
+// ];
 
-export default function HomePlayerList() {
+export default async function HomePlayerList() {
+  const playersUnsorted = await db(
+    `
+      SELECT * FROM "Player"
+    `
+  );
+
+  if (playersUnsorted.length === 0) {
+    return <>Error getting players.</>;
+  }
+
+  const players = playersUnsorted.sort((a, b) =>
+    a.displayOrder < b.displayOrder ? 1 : -1
+  );
+
   return (
     <div className={styles["wrapper"]}>
       <div className={styles["content"]}>
@@ -100,11 +117,11 @@ export default function HomePlayerList() {
                   key={player.username}
                 >
                   <div className={styles["home-player-row-identifier"]}>
-                    <Image
+                    <img
                       className={styles["avatar"]}
                       width={48}
                       height={48}
-                      src={player.avatarS3Key}
+                      src={"/api/resource/" + player.avatarS3Key}
                       alt={player.username}
                     />
                     <h2>{player.username}</h2>

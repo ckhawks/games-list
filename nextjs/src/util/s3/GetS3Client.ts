@@ -2,7 +2,7 @@ import { S3Client, S3ClientConfig } from "@aws-sdk/client-s3";
 
 export default function getS3Client() {
   const client = new S3Client({
-    region: process.env.MC_AWS_REGION,
+    region: process.env.MC_AWS_S3_REGION,
     apiVersion: "latest",
     credentials: {
       accessKeyId: process.env.MC_AWS_ACCESS_KEY,
