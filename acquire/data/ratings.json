@@ -7,9 +7,359 @@
       "ratings": {
         "10": [
           {
-            "game": "Factorio",
-            "appId": "",
+            "name": "Factorio",
+            "appId": 427520,
             "blurb": "send monkey to space"
+          },
+          {
+            "name": "VALORANT",
+            "appId": 0,
+            "blurb": "shoot bag guy"
+          }
+        ],
+        "9": [
+          {
+            "name": "RimWorld",
+            "appId": 294100,
+            "blurb": "shoot bag guy"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DeadNotSleeping",
+      "id": "39258913-32fb-4e4a-bdfe-e9f0392df744",
+      "bio": "im jmart",
+      "ratings": {
+        "10": [
+          {
+            "name": "Super Monkey Ball",
+            "appId": 0,
+            "blurb": "send monkey to space"
+          },
+          {
+            "name": "RimWorld",
+            "appId": 294100,
+            "blurb": "shoot bag guy"
+          },
+          {
+            "name": "Going Medieval",
+            "appId": 1029780
+          }
+        ]
+      }
+    },
+    {
+      "name": "Nrohgnol",
+      "id": "1a56c0c6-f770-4752-a2d6-6976918c1622",
+      "bio": "im dad",
+      "ratings": {
+        "10": [
+          {
+            "name": "7 Days to Die",
+            "appId": 251570
+          },
+          {
+            "name": "Assassin's Creed Valhalla",
+            "appId": 2208920
+          },
+          {
+            "name": "Astroneer",
+            "appId": 361420
+          },
+          {
+            "name": "Dragon Age: Origins - Ultimate Edition",
+            "appId": 47810
+          },
+          {
+            "name": "ELDEN RING",
+            "appId": 1245620
+          },
+          {
+            "name": "The Elder Scrolls V: Skyrim Special Edition",
+            "appId": 489830
+          },
+          {
+            "name": "Factorio",
+            "appId": 427520
+          },
+          {
+            "name": "God of War",
+            "appId": 1593500
+          },
+          {
+            "name": "Middle-earth™: Shadow of Mordor™",
+            "appId": 241930
+          },
+          {
+            "name": "Mount & Blade II: Bannerlord",
+            "appId": 261550
+          },
+          {
+            "name": "The Riftbreaker",
+            "appId": 780310
+          },
+          {
+            "name": "Satisfactory",
+            "appId": 526870
+          },
+          {
+            "name": "Subnautica",
+            "appId": 264710
+          },
+          {
+            "name": "They Are Billions",
+            "appId": 644930
+          },
+          {
+            "name": "The Witcher 3: Wild Hunt",
+            "appId": 292030
+          }
+        ],
+        "9": [
+          {
+            "name": "Frostpunk",
+            "appId": 323190 
+          },
+          {
+            "name": "Green Hell",
+            "appId": 815370
+          },
+          {
+            "name": "IXION",
+            "appId": 1113120
+          },
+          {
+            "name": "Remnant: From the Ashes",
+            "appId": 617290
+          },
+          {
+            "name": "REMNANT II®",
+            "appId": 1282100
+          }
+        ],
+        "8": [
+          {
+            "name": "Breathedge",
+            "appId": 738520 
+          },
+          {
+            "name": "Divinity: Original Sin 2 - Definitive Edition",
+            "appId": 435150
+          },
+          {
+            "name": "Dyson Sphere Program",
+            "appId": 1366540
+          },
+          {
+            "name": "Horizon Zero Dawn™ Complete Edition",
+            "appId": 1151640
+          },
+          {
+            "name": "No Rest for the Wicked",
+            "appId": 1371980
+          },
+          {
+            "name": "RAILGRADE",
+            "appId": 1355090
+          },
+          {
+            "name": "RimWorld",
+            "appId": 294100
+          },
+          {
+            "name": "Sons Of The Forest",
+            "appId": 1326470
+          },
+          {
+            "name": "Starfield",
+            "appId": 1716740
+          },
+          {
+            "name": "Subnautica: Below Zero",
+            "appId": 848450
+          },
+          {
+            "name": "V Rising",
+            "appId": 1604030
+          }
+        ],
+        "7": [
+          {
+            "name": "Against the Storm",
+            "appId": 1336490
+          },
+          {
+            "name": "Age of Darkness: Final Stand",
+            "appId": 1426450
+          },
+          {
+            "name": "Aliens: Dark Descent",
+            "appId": 1150440
+          },
+          {
+            "name": "Astro Colony",
+            "appId": 1614550
+          },
+          {
+            "name": "Atrio: The Dark Wild",
+            "appId": 1125390
+          },
+          {
+            "name": "Baldur's Gate 3",
+            "appId": 1086940 
+          },
+          {
+            "name": "Deep Rock Galactic: Survivor",
+            "appId": 2321470
+          },
+          {
+            "name": "Enshrouded",
+            "appId": 1203620
+          },
+          {
+            "name": "Gloomhaven",
+            "appId": 780290
+          },
+          {
+            "name": "Industries of Titan",
+            "appId": 427940
+          },
+          {
+            "name": "Lords of the Fallen",
+            "appId": 1501750
+          },
+          {
+            "name": "Medieval Dynasty",
+            "appId": 1129580
+          },
+          {
+            "name": "Mob Factory",
+            "appId": 2182630
+          },
+          {
+            "name": "Night of the Dead",
+            "appId": 1377380
+          },
+          {
+            "name": "The Outer Worlds",
+            "appId": 578650
+          },
+          {
+            "name": "Oxygen Not Included",
+            "appId": 457140
+          },
+          {
+            "name": "Pacific Drive",
+            "appId": 1458140
+          },
+          {
+            "name": "Red Dead Redemption 2",
+            "appId": 1174180
+          },
+          {
+            "name": "Warhammer 40,000: Chaos Gate - Daemonhunters",
+            "appId": 1611910
+          }
+        ],
+        "6": [
+          {
+            "name": "Age of Wonders 4",
+            "appId": 1669000
+          },
+          {
+            "name": "Dark Envoy",
+            "appId": 945770
+          },
+          {
+            "name": "Desynced: Autonomous Colony Simulator",
+            "appId": 1450900
+          },
+          {
+            "name": "Dungeons 4",
+            "appId": 1643310
+          },
+          {
+            "name": "Forever Skies",
+            "appId": 1641960
+          },
+          {
+            "name": "Nightingale",
+            "appId": 1928980
+          },
+          {
+            "name": "Plan B: Terraform",
+            "appId": 1894430
+          },
+          {
+            "name": "Portal: Revolution",
+            "appId": 601360
+          },
+          {
+            "name": "Survival: Fountain of Youth",
+            "appId": 1967630
+          }
+        ],
+        "5": [
+          {
+            "name": "Gord",
+            "appId": 1351210
+          },
+          {
+            "name": "Last Epoch",
+            "appId": 899770
+          },
+          {
+            "name": "Legendary Hoplite",
+            "appId": 1479810
+          },
+          {
+            "name": "New Cycle",
+            "appId": 2198510
+          },
+          {
+            "name": "Oxygen",
+            "appId": 2061430
+          },
+          {
+            "name": "Returnal",
+            "appId": 1649240
+          },
+          {
+            "name": "Stranded: Alien Dawn",
+            "appId": 1324130
+          },
+          {
+            "name": "Surviving the Abyss",
+            "appId": 1254320
+          }
+        ],
+        "4": [
+          {
+            "name": "Above Snakes",
+            "appId": 1589120
+          },
+          {
+            "name": "Aquatico",
+            "appId": 1812300
+          },
+          {
+            "name": "SpellForce: Conquest of Eo",
+            "appId": 1581770
+          },
+          {
+            "name": "Above Snakes",
+            "appId": 1589120
+          }
+        ],
+        "3": [
+          {
+            "name": "Project Zomboid",
+            "appId": 108600
+          },
+          {
+            "name": "Smalland: Survive the Wilds",
+            "appId": 768200 
           }
         ]
       }
