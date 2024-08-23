@@ -1,0 +1,208 @@
+{
+  "response": {
+    "store_items": [
+      {
+        "item_type": 0,
+        "id": 294100,
+        "success": 1,
+        "visible": true,
+        "name": "RimWorld",
+        "store_url_path": "app/294100/RimWorld",
+        "appid": 294100,
+        "type": 0,
+        "tagids": [
+          220585,
+          7332,
+          1662,
+          9,
+          3810,
+          12472,
+          1643,
+          599,
+          4182,
+          1669,
+          4328,
+          1695,
+          5125,
+          3871,
+          3942,
+          492,
+          1755,
+          21725,
+          1647,
+          4195
+        ],
+        "categories": {
+          "supported_player_categoryids": [
+            2
+          ],
+          "feature_categoryids": [
+            30,
+            23,
+            42,
+            62
+          ],
+          "controller_categoryids": [
+            18
+          ]
+        },
+        "reviews": {
+          "summary_filtered": {
+            "review_count": 162590,
+            "percent_positive": 97,
+            "review_score": 9,
+            "review_score_label": "Overwhelmingly Positive"
+          }
+        },
+        "basic_info": {
+          "short_description": "A sci-fi colony sim driven by an intelligent AI storyteller. Generates stories by simulating psychology, ecology, gunplay, melee combat, climate, biomes, diplomacy, interpersonal relationships, art, medicine, trade, and more.",
+          "publishers": [
+            {
+              "name": "Ludeon Studios",
+              "creator_clan_account_id": 32942316
+            }
+          ],
+          "developers": [
+            {
+              "name": "Ludeon Studios",
+              "creator_clan_account_id": 32942316
+            }
+          ]
+        },
+        "tags": [
+          {
+            "tagid": 220585,
+            "weight": 998
+          },
+          {
+            "tagid": 7332,
+            "weight": 971
+          },
+          {
+            "tagid": 1662,
+            "weight": 868
+          },
+          {
+            "tagid": 9,
+            "weight": 687
+          },
+          {
+            "tagid": 3810,
+            "weight": 669
+          },
+          {
+            "tagid": 12472,
+            "weight": 648
+          },
+          {
+            "tagid": 1643,
+            "weight": 518
+          },
+          {
+            "tagid": 599,
+            "weight": 459
+          },
+          {
+            "tagid": 4182,
+            "weight": 390
+          },
+          {
+            "tagid": 1669,
+            "weight": 387
+          },
+          {
+            "tagid": 4328,
+            "weight": 382
+          },
+          {
+            "tagid": 1695,
+            "weight": 380
+          },
+          {
+            "tagid": 5125,
+            "weight": 362
+          },
+          {
+            "tagid": 3871,
+            "weight": 359
+          },
+          {
+            "tagid": 3942,
+            "weight": 337
+          },
+          {
+            "tagid": 492,
+            "weight": 331
+          },
+          {
+            "tagid": 1755,
+            "weight": 325
+          },
+          {
+            "tagid": 21725,
+            "weight": 321
+          },
+          {
+            "tagid": 1647,
+            "weight": 299
+          },
+          {
+            "tagid": 4195,
+            "weight": 298
+          }
+        ],
+        "assets": {
+          "asset_url_format": "steam/apps/294100/${FILENAME}?t=1712954312",
+          "main_capsule": "capsule_616x353.jpg",
+          "small_capsule": "capsule_231x87.jpg",
+          "header": "header.jpg",
+          "page_background": "page_bg_generated_v6b.jpg",
+          "hero_capsule": "hero_capsule.jpg",
+          "library_capsule": "library_600x900.jpg",
+          "library_capsule_2x": "library_600x900_2x.jpg",
+          "library_hero": "library_hero.jpg",
+          "library_hero_2x": "library_hero_2x.jpg",
+          "community_icon": "addbe3b704b267060b4d5d7649cfb292de61bd70"
+        },
+        "release": {
+          "steam_release_date": 1539787596,
+          "original_release_date": 1539759600,
+          "original_steam_release_date": 1468620000
+        },
+        "best_purchase_option": {
+          "packageid": 41602,
+          "purchase_option_name": "RimWorld",
+          "final_price_in_cents": "3499",
+          "formatted_final_price": "$34.99",
+          "user_can_purchase_as_gift": true,
+          "hide_discount_pct_for_compliance": false,
+          "included_game_count": 1,
+          "requires_shipping": false
+        },
+        "assets_without_overrides": {
+          "asset_url_format": "steam/apps/294100/${FILENAME}?t=1712954312",
+          "main_capsule": "capsule_616x353.jpg",
+          "small_capsule": "capsule_231x87.jpg",
+          "header": "header.jpg",
+          "page_background": "page_bg_generated_v6b.jpg",
+          "hero_capsule": "hero_capsule.jpg",
+          "library_capsule": "library_600x900.jpg",
+          "library_capsule_2x": "library_600x900_2x.jpg",
+          "library_hero": "library_hero.jpg",
+          "library_hero_2x": "library_hero_2x.jpg",
+          "community_icon": "addbe3b704b267060b4d5d7649cfb292de61bd70"
+        },
+        "links": [
+          {
+            "link_type": 1,
+            "url": "https://www.youtube.com/tynansylvester/"
+          },
+          {
+            "link_type": 3,
+            "url": "https://x.com/TynanSylvester"
+          }
+        ]
+      }
+    ]
+  }
+}

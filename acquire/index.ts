@@ -1,6 +1,13 @@
 require("dotenv").config();
 import { db } from "./util/db/db";
 
+import * as fs from 'fs';
+import * as path from 'path';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+
+import getS3Client from "./util/s3/GetS3Client";
+import { checkIfKeyExists } from "./util/s3/CheckIfS3ObjectExists";
+
 console.log("Starting up GAME DATA ACQUIRER V1");
 console.log("   Written by DeadNotSleeping    ");
 console.log("          (very epic)            ");
@@ -139,37 +146,159 @@ function getAppIdsFromRatingsFile() {
       
     }
   }
+
+
+  // TODO remove duplicate entries in both appIds and gamesWithoutAppIds
   console.log(appIds);
   console.log(gamesWithoutAppIds);
 }
-getAppIdsFromRatingsFile()
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-appIds = appIds.slice(0, 3); // only take the first 3 games off the appIds list
 
+// using the previous appIds array, get store info for each appId
 async function getStoreInfoForAllAppIds () {
   // for appId in appIds
   // get store data for that app id
   
   for(const appid of appIds){
     const response = await getStoreItemDataForAppId(appid);
-    console.log(JSON.stringify(response, null, 2));
-    
-    sleep(2000);
+    // console.log(JSON.stringify(response, null, 2));
+
     // write store data to database
+    await writeGameInfoToDatabase(response.response.store_items[0])
+    
+    // wait a minute before getting the next game as to not hurt Mr. Steam
+    console.log("Waiting for 5 seconds before continuing...");
+    await sleep(5000);
+    console.log("");
   }
 }
 
+const s3 = getS3Client();
+
+// Function to download and upload an image
+async function downloadAndUploadImage(imageUrl: string, s3Key: string) {
+  try {
+    // Step 1: Download the image using native fetch
+    const response = await fetch(imageUrl);
+
+    if (!response.ok) {
+      throw new Error(`Failed to download image: ${response.statusText}`);
+    }
+
+    // Convert response to buffer
+    const imageBuffer = await response.arrayBuffer();
+
+    // Step 2: Save the image to a temporary location
+    const tempFilePath = path.join(__dirname, 'temp.jpg');
+    fs.writeFileSync(tempFilePath, Buffer.from(imageBuffer));
+
+    // Step 3: Upload the image to the S3 bucket
+    const fileStream = fs.createReadStream(tempFilePath);
+    const uploadParams = {
+      Bucket: process.env.MC_AWS_S3_BUCKET,
+      Key: s3Key, // The S3 key (path within the bucket)
+      Region: process.env.MC_AWS_S3_REGION,
+      Body: fileStream,
+      ContentType: 'image/jpeg',
+    };
+
+    const command = new PutObjectCommand(uploadParams);
+    await s3.send(command);
+
+    console.log(`Game artwork image uploaded successfully to ${process.env.MC_AWS_S3_BUCKET}/${s3Key}`);
+
+    // Clean up: Delete the temporary file
+    fs.unlinkSync(tempFilePath);
+
+  } catch (error) {
+    console.error('Error downloading or uploading the image:', error);
+  }
+}
+
+function buildImageUrl(appId: number, path: string) {
+  return `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/${path}`;
+}
+
+async function writeGameInfoToDatabase(gameInfoResponse: any) {
+  // gameID
+  const gameID = gameInfoResponse.appid;
+  // game name
+  const gameName = gameInfoResponse.name;
+
+  console.log("Capturing and writing info for " + gameName + "...");
+
+  const selectQuery = `
+    SELECT "steamAppId" FROM "Game"
+    WHERE "steamAppId" = $1
+  `
+  const selectParams = [gameID];
+  const selectResponse = await db(selectQuery, selectParams);
+  // console.log("selectResponse", selectResponse)
+  if (!(selectResponse.length === 0)) {
+    console.log(gameName + " is already in database!");
+    return;
+  }
+  // console.log(selectResponse);
+  
+  
+  // we should expect selectResponse.length to be 1 since there's a row with the username Stellaric in the Player table
+
+
+  // TODO make sure we don't already have this game in the database
+  // (hint: do a SELECT first by the game's name)
+  
+  
+  // release date
+  const releaseDateTimestamp = gameInfoResponse.release.steam_release_date;
+  const releaseDate = new Date(releaseDateTimestamp * 1000).toISOString(); // 2024-08-23 00:22:00.797972
+  // capsule image path
+  const capsuleImagePath = gameInfoResponse.assets.header; // TODO grab this image and write it to S3 with the key below
+  const artworkS3Key = "games/" + gameName + "-" + gameID + "-" + capsuleImagePath;
+  if (!checkIfKeyExists(process.env.MC_AWS_S3_BUCKET, artworkS3Key)) {
+    await downloadAndUploadImage(buildImageUrl(gameID, capsuleImagePath), artworkS3Key);
+  }
+  
+  // "formatted_final_price"
+  const finalPrice = gameInfoResponse.best_purchase_option.formatted_final_price;
+  // developer / publisher
+  const developerName = gameInfoResponse.basic_info.developers.name;
+  const publisherName = gameInfoResponse.basic_info.publishers.name;
+  // summary filtered -> review percentage
+  const steamReviewPercentage = gameInfoResponse.reviews.summary_filtered.percent_positive;
+  // tags
+  const gameTags = gameInfoResponse.tags;
+  // short description
+  const gameDescription = gameInfoResponse.basic_info.short_description;
+  // Store URL path
+  const storeURL = gameInfoResponse.store_url_path;
+
+  // metacriticReviewPercent: integer
+  // steamReviewPercent: integer
+  
+  const query = `
+    INSERT INTO "Game"
+      (name, "steamAppId", "storeURL", "storeName", "descriptionShort", "releaseDate", "artworkS3Key", "steamReviewPercent")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+  `
+  const params = [gameName, gameID, storeURL, 'Steam', gameDescription, releaseDate, artworkS3Key, steamReviewPercentage];
+  const insertResult = await db(query, params);
+  
+  // we should expect insertResults.length == 0, if its not then something weird happened
+  if(insertResult.length !== 0){
+    console.log("ERROR");
+  }
+  else{
+    console.log("Write for " + gameName + " successful!");
+  }
+    
+}
+
+getAppIdsFromRatingsFile()
+appIds = appIds.slice(0, 3); // only take the first 3 games off the appIds list
 getStoreInfoForAllAppIds ()
 
-// release date
-// capsule image path
-// "formatted_final_price"
-// game name
-// developer / publisher
-// summary filtered -> review percentage
-// tags
-// short description
+
 
 // const fart = new URLSearchParams({
 //   "search": 'funny dog',
