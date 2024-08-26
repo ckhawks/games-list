@@ -42,7 +42,7 @@ export function ListFilters() {
             </Dropdown.Toggle>
             <Dropdown.Menu className="" data-bs-theme="dark">
               <Dropdown.Item eventKey="1" active>
-                This doesn't work yet
+                This doesn&apos;t work yet
               </Dropdown.Item>
               <Dropdown.Item eventKey="2">Change to be</Dropdown.Item>
               <Dropdown.Item eventKey="3">Multi-select</Dropdown.Item>
