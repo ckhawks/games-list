@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Clock, ExternalLink, ShoppingCart, Star } from "react-feather";
 import { db } from "@/util/db/db";
 import { redirect } from "next/navigation";
+import FooterBar from "@/components/FooterBar";
+import { ListFilters } from "@/components/ListFilters";
 
 const player = {
   username: "Stellaric",
@@ -85,113 +87,125 @@ export default async function PlayerListPage({
 
   // search DB for username lower()
   return (
-    <div className={styles["wrapper"]}>
-      <div className={styles["content"]}>
-        <Row>
-          <BackButton to="/" text={"Back"} />
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <h1>{player.username}&apos;s Games</h1>
-            <span style={{ color: "var(--sub-text-color)" }}>
-              Last updated {player.listLastUpdatedAt.toString()}
-            </span>
-          </div>
-          <p>{player.profileBlurb}</p>
-          <div className={styles["list-filter-controls"]}>Filters</div>
-          <div className={styles["game-list-wrapper"]}>
-            {player.games &&
-              player.games.map((game, index) => {
-                return (
-                  <div className={styles["game-list-item"]} key={game.name}>
-                    <div className={styles["game-list-top"]}>
-                      <div className={styles["game-list-score"]}>
-                        {game.rating}
-                        <div
-                          className={`${styles["game-extras"]} roww`}
-                          style={{
-                            fontWeight: 400,
-                          }}
-                        >
-                          #{index + 1}
+    <>
+      <div className={styles["wrapper"]}>
+        <div className={styles["content"]}>
+          <Row>
+            <BackButton to="/" text={"Back"} />
+            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <h1>{player.username}&apos;s Games</h1>
+              <span style={{ color: "var(--sub-text-color)" }}>
+                Last updated {player.listLastUpdatedAt.toString()}
+              </span>
+            </div>
+            <p>{player.profileBlurb}</p>
+            <div className={styles["list-filter-controls"]}>
+              <ListFilters />
+              <span className={"subtext"}>
+                {player.games.length} total games
+              </span>
+            </div>
+            <div className={styles["game-list-wrapper"]}>
+              {player.games &&
+                player.games.map((game, index) => {
+                  return (
+                    <div className={styles["game-list-item"]} key={game.name}>
+                      <div className={styles["game-list-top"]}>
+                        <div className={styles["game-list-score"]}>
+                          {game.rating}
+                          <div
+                            className={`${styles["game-extras"]} roww`}
+                            style={{
+                              fontWeight: 400,
+                            }}
+                          >
+                            #{index + 1}
+                          </div>
                         </div>
-                      </div>
-                      <div className={styles["game-list-info"]}>
-                        <Image
-                          src={"/" + game.artworkS3Key}
-                          width={200}
-                          height={100}
-                          style={{ borderRadius: "4px", objectFit: "cover" }}
-                          alt={game.name + " artwork"}
-                        />
-                        <div className={styles["game-list-info-main"]}>
-                          <div className={styles["game-info-1"]}>
-                            <div className={styles["game-title"]}>
-                              {game.name}
+                        <div className={styles["game-list-info"]}>
+                          <Image
+                            src={"/" + game.artworkS3Key}
+                            width={200}
+                            height={100}
+                            style={{ borderRadius: "4px", objectFit: "cover" }}
+                            alt={game.name + " artwork"}
+                          />
+                          <div className={styles["game-list-info-main"]}>
+                            <div className={styles["game-info-1"]}>
+                              <div className={styles["game-title"]}>
+                                {game.name}
+                              </div>
+                              <Link
+                                href={game.storeURL}
+                                className={"external-link"}
+                              >
+                                {game.storeName}
+                                <ExternalLink size={14} />
+                              </Link>
+                              <div
+                                className={"subtext roww"}
+                                style={{ fontSize: "14px" }}
+                              >
+                                Released: {game.releaseDate}
+                              </div>
                             </div>
-                            <Link
-                              href={game.storeURL}
-                              className={"external-link"}
-                            >
-                              {game.storeName}
-                              <ExternalLink size={14} />
-                            </Link>
                             <div
-                              className={"subtext roww"}
-                              style={{ fontSize: "14px" }}
+                              className={`${styles["game-info-2tags"]} roww`}
                             >
-                              Released: {game.releaseDate}
-                            </div>
-                          </div>
-                          <div className={`${styles["game-info-2tags"]} roww`}>
-                            {game.tags &&
-                              game.tags.map((tag, index) => {
-                                return (
-                                  <div
-                                    className={`badge grey small`}
-                                    key={tag.name}
-                                  >
-                                    {tag.name}
-                                  </div>
-                                );
-                              })}
-                          </div>
-                          <div className={`${styles["game-info-3extra"]} roww`}>
-                            <div
-                              className={`${styles["review-badge"]} badge blue small roww`}
-                            >
-                              <Star
-                                size={14}
-                                fill={"var(--accent-dark-color)"}
-                              />
-                              {game.ratings &&
-                                game.ratings.map((rating, index) => {
+                              {game.tags &&
+                                game.tags.map((tag, index) => {
                                   return (
-                                    <span key={rating.name}>
-                                      {rating.name}: {rating.rating}%
-                                    </span>
+                                    <div
+                                      className={`badge grey small`}
+                                      key={tag.name}
+                                    >
+                                      {tag.name}
+                                    </div>
                                   );
                                 })}
                             </div>
-                            <div className={`${styles["game-extras"]} roww`}>
-                              <Clock size={14} /> {game.hoursPlayed}h
-                            </div>
-                            <div className={`${styles["game-extras"]} roww`}>
-                              <ShoppingCart size={14} />{" "}
-                              {game.estimatedCopiesSold}
+                            <div
+                              className={`${styles["game-info-3extra"]} roww`}
+                            >
+                              <div
+                                className={`${styles["review-badge"]} badge blue small roww`}
+                              >
+                                <Star
+                                  size={14}
+                                  fill={"var(--accent-dark-color)"}
+                                />
+                                {game.ratings &&
+                                  game.ratings.map((rating, index) => {
+                                    return (
+                                      <span key={rating.name}>
+                                        {rating.name}: {rating.rating}%
+                                      </span>
+                                    );
+                                  })}
+                              </div>
+                              <div className={`${styles["game-extras"]} roww`}>
+                                <Clock size={14} /> {game.hoursPlayed}h
+                              </div>
+                              <div className={`${styles["game-extras"]} roww`}>
+                                <ShoppingCart size={14} />{" "}
+                                {game.estimatedCopiesSold}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <div className={styles["game-list-bottom"]}>
+                        <i>&quot;{game.reviewBlurb}&quot;</i>
+                      </div>
                     </div>
-                    <div className={styles["game-list-bottom"]}>
-                      <i>&quot;{game.reviewBlurb}&quot;</i>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </Row>
+                  );
+                })}
+            </div>
+          </Row>
+        </div>
       </div>
-    </div>
+      <FooterBar />
+    </>
   );
 
   //   const list = ['h', 'e', 'l', 'l', 'o'];

@@ -1,0 +1,32 @@
+.dropdown {
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  border-radius: 4px;
+  color: var(--sub-text-color);
+
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+
+  &:hover {
+    background-color: var(--hover-background-color);
+    border: 1px solid var(--border-color-hover);
+    color: var(--text-color);
+  }
+
+  &::after {
+    display: none;
+  }
+}
+
+.active-sort {
+  color: var(--text-color);
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
