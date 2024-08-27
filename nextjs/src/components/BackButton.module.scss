@@ -1,7 +1,7 @@
 .BackButton {
   font-size: 14px;
   background-color: var(--background-color);
-  color: var(--mostly-text-color);
+  color: var(--sub-text-color) !important;
   text-decoration: none;
   align-items: center;
   justify-content: center;
@@ -14,19 +14,19 @@
   gap: 2px;
   flex-direction: row;
   max-width: fit-content;
-}
 
-.BackButton:active,
-.BackButton:visited {
-  color: var(--text-color);
-}
+  &:hover {
+    background-color: var(--hover-background-color);
+    color: var(--mostly-text-color) !important;
+  }
 
-.BackButton:hover {
-  background-color: var(--hover-background-color);
-  color: var(--text-color);
-}
+  & > svg {
+    margin-right: 6px;
+    margin-bottom: -1px;
+  }
 
-.BackButton > svg {
-  margin-right: 6px;
-  margin-bottom: -1px;
+  &:active,
+  &:visited {
+    color: var(--sub-text-color);
+  }
 }
