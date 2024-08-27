@@ -1,6 +1,91 @@
 {
   "players": [
     {
+      "name": "guitars12",
+      "id": "a33c0f4e-2760-4778-81d0-14d15a682a04",
+      "bio": "",
+      "ratings": {
+        "2": [
+          {
+            "name": "Battlefield™ 2042",
+            "appId": "1517290"
+          }
+        ],
+        "4": [
+          {
+            "name": "Minecraft",
+            "appId": 0
+          },
+          {
+            "name": "Counter-Strike 2",
+            "appId": "730"
+          }
+        ],
+        "6": [
+          {
+            "name": "Overwatch® 2",
+            "appId": "2357570"
+          },
+          {
+            "name": "No Man's Sky",
+            "appId": "275850"
+          },
+          {
+            "name": "Grand Theft Auto V",
+            "appId": "271590"
+          }
+        ],
+        "7": [
+          {
+            "name": "Modded Minecraft",
+            "appId": 0
+          },
+          {
+            "name": "GUNDAM EVOLUTION",
+            "appId": 0
+          },
+          {
+            "name": "Bloons TD 6",
+            "appId": "960090"
+          }
+        ],
+        "8": [
+          {
+            "name": "Arma 3",
+            "appId": "107410"
+          },
+          {
+            "name": "Counter-Strike: Global Offensive",
+            "appId": 0
+          },
+          {
+            "name": "Lethal Company",
+            "appId": "1966720"
+          },
+          {
+            "name": "Marvel’s Spider-Man Remastered",
+            "appId": "1817070"
+          }
+        ],
+        "9": [
+          {
+            "name": "Rocket League",
+            "appId": 0
+          },
+          {
+            "name": "The Farmer Was Replaced",
+            "appId": "2060160"
+          }
+        ],
+        "10": [
+          {
+            "name": "Factorio",
+            "appId": "427520"
+          }
+        ]
+      }
+    },
+    {
       "name": "Eisel",
       "id": "ae3fffc4-b78d-4102-bc0d-0b622c0f590f",
       "bio": "",
