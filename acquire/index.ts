@@ -15,6 +15,7 @@ console.log("");
 console.log("Reading player and ratings data from ratings.json...");
 console.log("");
 import data from './data/ratings.json';
+import { tags } from "../nextjs/src/constants/tags";
 
 // https://steamapi.xpaw.me/#IStoreBrowseService/GetItems
 // https://steamdb.info/app/427520/subs/
@@ -50,6 +51,7 @@ function getPopularTags() {
 
 
 async function getStoreItemDataForAppId(appId: number) {
+  console.log("appid: ", appId);
   // setup data
   const input_json = {
     "ids": [
@@ -148,9 +150,9 @@ function getAppIdsFromRatingsFile() {
   }
 
 
-  // TODO remove duplicate entries in both appIds and gamesWithoutAppIds
-  console.log(appIds);
-  console.log(gamesWithoutAppIds);
+  // remove duplicate entries in both appIds and gamesWithoutAppIds
+  appIds = [...new Set(appIds)];
+  gamesWithoutAppIds = [...new Set(gamesWithoutAppIds)];
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -165,12 +167,17 @@ async function getStoreInfoForAllAppIds () {
     // console.log(JSON.stringify(response, null, 2));
 
     // write store data to database
-    await writeGameInfoToDatabase(response.response.store_items[0])
-    
-    // wait a minute before getting the next game as to not hurt Mr. Steam
-    console.log("Waiting for 5 seconds before continuing...");
-    await sleep(5000);
+    if(await writeGameInfoToDatabase(response.response.store_items[0])) {
+      // wait a minute before getting the next game as to not hurt Mr. Steam
+      console.log("Waiting for 5 seconds before continuing...");
+      await sleep(5000);
+      
+    }
     console.log("");
+    
+    
+    
+    
   }
 }
 
@@ -179,6 +186,7 @@ const s3 = getS3Client();
 // Function to download and upload an image
 async function downloadAndUploadImage(imageUrl: string, s3Key: string) {
   try {
+    console.log("START")
     // Step 1: Download the image using native fetch
     const response = await fetch(imageUrl);
 
@@ -220,7 +228,7 @@ function buildImageUrl(appId: number, path: string) {
   return `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/${path}`;
 }
 
-async function writeGameInfoToDatabase(gameInfoResponse: any) {
+async function writeGameInfoToDatabase(gameInfoResponse: any): Promise<boolean> {
   // gameID
   const gameID = gameInfoResponse.appid;
   // game name
@@ -237,7 +245,7 @@ async function writeGameInfoToDatabase(gameInfoResponse: any) {
   // console.log("selectResponse", selectResponse)
   if (!(selectResponse.length === 0)) {
     console.log(gameName + " is already in database!");
-    return;
+    return false;
   }
   // console.log(selectResponse);
   
@@ -250,20 +258,21 @@ async function writeGameInfoToDatabase(gameInfoResponse: any) {
   
   
   // release date
-  const releaseDateTimestamp = gameInfoResponse.release.steam_release_date;
+  const releaseDateTimestamp = gameInfoResponse.release.steam_release_date || 0;
   const releaseDate = new Date(releaseDateTimestamp * 1000).toISOString(); // 2024-08-23 00:22:00.797972
   // capsule image path
   const capsuleImagePath = gameInfoResponse.assets.header; // TODO grab this image and write it to S3 with the key below
-  const artworkS3Key = "games/" + gameName + "-" + gameID + "-" + capsuleImagePath;
-  if (!checkIfKeyExists(process.env.MC_AWS_S3_BUCKET, artworkS3Key)) {
+  const artworkS3Key = "games/" + gameName.replace(/[^0-9a-z]/gi, '') + "-" + gameID + "-" + capsuleImagePath;
+  if (!(await checkIfKeyExists(process.env.MC_AWS_S3_BUCKET, artworkS3Key))) {
+    console.log("Uploading artwork...")
     await downloadAndUploadImage(buildImageUrl(gameID, capsuleImagePath), artworkS3Key);
   }
   
   // "formatted_final_price"
-  const finalPrice = gameInfoResponse.best_purchase_option.formatted_final_price;
-  // developer / publisher
-  const developerName = gameInfoResponse.basic_info.developers.name;
-  const publisherName = gameInfoResponse.basic_info.publishers.name;
+  // const finalPrice = gameInfoResponse.best_purchase_option?.formatted_final_price || 0;
+  // // developer / publisher
+  // const developerName = gameInfoResponse.basic_info.developers.name;
+  // const publisherName = gameInfoResponse.basic_info.publishers.name;
   // summary filtered -> review percentage
   const steamReviewPercentage = gameInfoResponse.reviews.summary_filtered.percent_positive;
   // tags
@@ -271,7 +280,7 @@ async function writeGameInfoToDatabase(gameInfoResponse: any) {
   // short description
   const gameDescription = gameInfoResponse.basic_info.short_description;
   // Store URL path
-  const storeURL = gameInfoResponse.store_url_path;
+  const storeURL = "https://store.steampowered.com/" + gameInfoResponse.store_url_path;
 
   // metacriticReviewPercent: integer
   // steamReviewPercent: integer
@@ -283,7 +292,7 @@ async function writeGameInfoToDatabase(gameInfoResponse: any) {
   `
   const params = [gameName, gameID, storeURL, 'Steam', gameDescription, releaseDate, artworkS3Key, steamReviewPercentage];
   const insertResult = await db(query, params);
-  
+
   // we should expect insertResults.length == 0, if its not then something weird happened
   if(insertResult.length !== 0){
     console.log("ERROR");
@@ -291,12 +300,159 @@ async function writeGameInfoToDatabase(gameInfoResponse: any) {
   else{
     console.log("Write for " + gameName + " successful!");
   }
-    
+  
+  ///// WRITE THE GAME'S TAGS TO GAMETAG
+  // 1. Get the gameId from the Game table by the steamAppId
+  // We know steamAppId and we need to figure out what the game's id (uuid) in our database table is
+  // We need to know our game's id so that we can use it as a foreign key in GameTag
+  // Return the game in the Game table where the steamAppId = this current game 
+  // 2. Get the tagId (our's, not steam's), from the Tag table by the steamTagId
+  // 3. Insert record into GameTag
+  // 4. Do each of steps 2-3 for each tag for each game
+
+  // select row from database table by a field 
+  const selectGameQuery = 'SELECT * FROM "Game" WHERE "steamAppId" = $1';
+  const selectGameParam = [gameID];
+  const insertGameResult = await db(selectGameQuery, selectGameParam); // 
+  
+  for(const tagObject of gameTags){
+    const selectTagId = 'SELECT * FROM "Tag" WHERE "steamTagId" = $1';
+    const selectTagParam = [tagObject.tagid]
+    const insertTagResult = await db(selectTagId, selectTagParam);
+    const insertGameTagQuerry = `INSERT INTO "GameTag" 
+      ("gameId", "tagId", weight) 
+      VALUES ($1, $2, $3)
+      `
+      const insertGameTagParams = [insertGameResult[0].id, insertTagResult[0].id, tagObject.weight];
+      const insertGameTagResult = await db(insertGameTagQuerry, insertGameTagParams);
+  }
+
+  return true;
 }
 
-getAppIdsFromRatingsFile()
-appIds = appIds.slice(0, 3); // only take the first 3 games off the appIds list
-getStoreInfoForAllAppIds ()
+
+
+async function writeNonSteamGamesToGameTable() {
+  for(const game of gamesWithoutAppIds){
+    console.log("Processing non-Steam game " + game);
+
+    const selectQuery = `
+      SELECT "name" FROM "Game"
+      WHERE "name" = $1
+    `
+    const selectParams = [game];
+    const selectResponse = await db(selectQuery, selectParams);
+    // console.log("selectResponse", selectResponse)
+    if (!(selectResponse.length === 0)) {
+      console.log(game + " is already in database!");
+    } else {
+      const insertNonSteamGameQuery = `
+        INSERT INTO "Game"
+          (name)
+        VALUES ($1)
+      `
+      const insertNonSteamGameParams = [game];
+      const insertResult = await db(insertNonSteamGameQuery, insertNonSteamGameParams);
+    }
+  }
+}
+
+
+
+async function writeGamePlayerRelationships() {
+  console.log("");
+  console.log("Writing player's game rating relationships...");
+
+  // get all data that needs to be written
+  for(const player of data.players) {
+    // select player or insert if not exists
+    // let playerFromDatabase = {};
+    
+    // const selectPlayerQuery = `
+    //   SELECT * FROM "Player" WHERE "username" = $1
+    // `
+    // const selectPlayerParams = [player.name];
+    // const selectPlayerResults = await db(selectPlayerQuery, selectPlayerParams);
+    // if (selectPlayerResults.length === 0) {
+    //   const insertPlayerQuery = `
+    //     INSERT INTO "Player" ("username", "displayOrder", "listLastUpdatedAt", "createdAt") VALUES ($1, 0, NOW(), NOW())
+    //   `
+    //   const insertPlayerParams = [player.name];
+    //   const insertPlayerResults = await db(insertPlayerQuery, insertPlayerParams);
+
+    //   const selectPlayerQuery = `
+    //     SELECT * FROM "Player" WHERE "username" = $1
+    //   `
+    //   const selectPlayerParams = [player.name];
+    //   const selectPlayerResults = await db(selectPlayerQuery, selectPlayerParams);
+    //   playerFromDatabase = selectPlayerResults[0];
+    // } else {
+    //   playerFromDatabase = selectPlayerResults[0];
+    // }
+      
+    for(const ratingTierKey in player.ratings) { // for each rating key in player's ratings
+      const ratingTier = player.ratings[ratingTierKey];
+      
+      console.log("");
+      console.log(player.name.toUpperCase() + " RATING TIER " + ratingTierKey)
+
+      let index = ratingTier.length;
+      for(const game of ratingTier){ // for each game within the ratingTier array
+       
+        // if game has an appId then select game by the steamAppId
+        // otherwise use the name
+        let selectGameQuery = "";
+        let selectGameParams = [];
+        if (game.appId) {
+          selectGameQuery = `
+            SELECT id FROM "Game" WHERE "steamAppId" = $1
+          `
+          selectGameParams = [game.appId];
+        } else {
+          selectGameQuery = `
+            SELECT id FROM "Game" WHERE "name" = $1
+          `
+          selectGameParams = [game.name];
+        }
+        
+        const selectGameResults = await db(selectGameQuery, selectGameParams);
+        if (selectGameResults.length === 0){
+          console.log("Houston there was a fucking problem we could not find that game.");
+        } else {
+          const checkPlayerGameNotExistsQuery = `
+            SELECT * FROM "PlayerGame" WHERE "gameId" = $1 AND "playerId" = $2;
+          `
+          const checkPlayerGameNotExistsParams = [selectGameResults[0].id, player.id];
+          const checkPlayerGameNotExistsResults = await db(checkPlayerGameNotExistsQuery, checkPlayerGameNotExistsParams);
+          if (checkPlayerGameNotExistsResults.length === 0) {
+            const insertGamePlayerQuery = `
+              INSERT INTO "PlayerGame" ("gameId", "playerId", "rating", "order", "reviewBlurb") VALUES ($1, $2, $3, $4, $5);
+            `
+            const insertGamePlayerParams = [selectGameResults[0].id, player.id, ratingTierKey, index * 100, game.blurb];
+            const insertGamePlayerResults = await db(insertGamePlayerQuery, insertGamePlayerParams);
+            console.log(`+ ${selectGameResults[0].name}`)
+          } else {
+            console.log(`${player.name} already has a rating for ${selectGameResults[0].name} in the table.`);
+          }
+
+        }
+      }
+      index--;
+      
+    }
+  }
+}
+
+async function run() {
+  await getAppIdsFromRatingsFile()
+  // appIds = appIds.slice(0, 3); // only take the first 3 games off the appIds list
+  await getStoreInfoForAllAppIds ()
+  await writeNonSteamGamesToGameTable() // Write the non-steam games to the database
+  await writeGamePlayerRelationships() 
+
+}
+
+run()
 
 
 

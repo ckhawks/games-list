@@ -1,27 +1,561 @@
 {
   "players": [
     {
-      "name": "Stellaric",
-      "id": "1305cca2-c600-4e0b-a29e-acf7c759e94d",
-      "bio": "hello!",
+      "name": "Eisel",
+      "id": "ae3fffc4-b78d-4102-bc0d-0b622c0f590f",
+      "bio": "",
       "ratings": {
-        "10": [
+        "1": [
           {
-            "name": "Factorio",
-            "appId": 427520,
-            "blurb": "send monkey to space"
+            "name": "Escape the Backrooms",
+            "appId": "1943950"
           },
           {
-            "name": "VALORANT",
-            "appId": 0,
-            "blurb": "shoot bag guy"
+            "name": "Aimlabs",
+            "appId": "714010"
+          },
+          {
+            "name": "Rocket League",
+            "appId": 0
+          },
+          {
+            "name": "Just Cause 2",
+            "appId": "8190"
+          },
+          {
+            "name": "Unfortunate Spacemen",
+            "appId": "408900"
+          },
+          {
+            "name": "Human Fall Flat",
+            "appId": "477160"
+          },
+          {
+            "name": "Spooky's Jump Scare Mansion: HD Renovation",
+            "appId": "577690"
+          },
+          {
+            "name": "Super Meat Boy",
+            "appId": "40800"
+          },
+          {
+            "name": "MultiVersus",
+            "appId": "1818750"
+          },
+          {
+            "name": "The Jackbox Party Pack 9",
+            "appId": "1850960"
+          },
+          {
+            "name": "BioShock™",
+            "appId": "7670"
+          }
+        ],
+        "2": [
+          {
+            "name": "Halo Infinite",
+            "appId": "1240440"
+          },
+          {
+            "name": "Splitgate",
+            "appId": "677620"
+          },
+          {
+            "name": "Five Nights at Freddy's: Security Breach",
+            "appId": "747660"
+          },
+          {
+            "name": "BeamNG.drive",
+            "appId": "284160"
+          },
+          {
+            "name": "Counter-Strike 2",
+            "appId": "730"
+          },
+          {
+            "name": "Bean Battles",
+            "appId": "765410"
+          },
+          {
+            "name": "Cuphead",
+            "appId": "268910"
+          },
+          {
+            "name": "Tetris® Effect: Connected",
+            "appId": "1003590"
+          },
+          {
+            "name": "Overwatch® 2",
+            "appId": "2357570"
+          },
+          {
+            "name": "Portal",
+            "appId": "400"
+          }
+        ],
+        "3": [
+          {
+            "name": "Sid Meier’s Civilization® VI",
+            "appId": "289070"
+          },
+          {
+            "name": "Golf With Your Friends",
+            "appId": "431240"
+          },
+          {
+            "name": "Factorio",
+            "appId": "427520"
+          },
+          {
+            "name": "Crab Game",
+            "appId": "1782210"
+          },
+          {
+            "name": "Cities: Skylines",
+            "appId": "255710"
+          },
+          {
+            "name": "The Witcher 3: Wild Hunt",
+            "appId": "292030"
+          },
+          {
+            "name": "Terraria",
+            "appId": "105600"
+          },
+          {
+            "name": "Escape from Tarkov",
+            "appId": 0
+          }
+        ],
+        "4": [
+          {
+            "name": "The Elder Scrolls V: Skyrim Special Edition",
+            "appId": "489830"
+          },
+          {
+            "name": "Town of Salem",
+            "appId": "334230"
+          },
+          {
+            "name": "Content Warning",
+            "appId": "2881650"
+          },
+          {
+            "name": "20 Small Mazes",
+            "appId": "2570630"
+          },
+          {
+            "name": "Leaf Blower Revolution - Idle Game",
+            "appId": "1468260"
+          },
+          {
+            "name": "Coloring Pixels",
+            "appId": "897330"
+          },
+          {
+            "name": "Fall Guys",
+            "appId": 0
+          },
+          {
+            "name": "The Binding of Isaac: Rebirth",
+            "appId": "250900"
+          },
+          {
+            "name": "Trials Fusion™",
+            "appId": "245490"
+          }
+        ],
+        "5": [
+          {
+            "name": "Spectre Divide",
+            "appId": "2641470"
+          },
+          {
+            "name": "shapez",
+            "appId": "1318690"
+          },
+          {
+            "name": "Isle of Arrows",
+            "appId": "1946970"
+          },
+          {
+            "name": "The Stanley Parable: Ultra Deluxe",
+            "appId": "1703340"
+          },
+          {
+            "name": "Half-Life: Alyx",
+            "appId": "546560"
+          },
+          {
+            "name": "Due Process",
+            "appId": "753650"
+          },
+          {
+            "name": "Grand Theft Auto V",
+            "appId": "271590"
+          }
+        ],
+        "6": [
+          {
+            "name": "Tabletop Simulator",
+            "appId": "286160"
+          },
+          {
+            "name": "GTFO",
+            "appId": "493520"
+          },
+          {
+            "name": "ULTRAKILL",
+            "appId": "1229490"
+          },
+          {
+            "name": "Last Train Outta' Wormtown",
+            "appId": "2318480"
+          },
+          {
+            "name": "Among Us",
+            "appId": "945360"
+          },
+          {
+            "name": "Inscryption",
+            "appId": "1092790"
+          }
+        ],
+        "7": [
+          {
+            "name": "Mini Motorways",
+            "appId": "1127500"
+          },
+          {
+            "name": "Satisfactory",
+            "appId": "526870"
+          },
+          {
+            "name": "ASTRONEER",
+            "appId": "361420"
+          },
+          {
+            "name": "FINAL FANTASY XIV Online",
+            "appId": "39210"
+          },
+          {
+            "name": "Beat Saber",
+            "appId": "620980"
+          },
+          {
+            "name": "PlateUp!",
+            "appId": "1599600"
+          }
+        ],
+        "8": [
+          {
+            "name": "Lies of P",
+            "appId": "1627720"
+          },
+          {
+            "name": "Lethal Company",
+            "appId": "1966720"
+          },
+          {
+            "name": "Phasmophobia",
+            "appId": "739630"
+          },
+          {
+            "name": "Cult of the Lamb",
+            "appId": "1313140"
           }
         ],
         "9": [
           {
+            "name": "VALORANT",
+            "appId": 0
+          },
+          {
+            "name": "Bloons TD 6",
+            "appId": "960090"
+          },
+          {
+            "name": "Omega Strikers",
+            "appId": "1869590"
+          }
+        ],
+        "10": [
+          {
+            "name": "Minecraft",
+            "appId": 0
+          },
+          {
+            "name": "Wizard101",
+            "appId": "799960"
+          },
+          {
+            "name": "ELDEN RING",
+            "appId": "1245620"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Stellaric",
+      "id": "1305cca2-c600-4e0b-a29e-acf7c759e94d",
+      "bio": "hello!",
+      "ratings": {
+        "3": [
+          {
+            "name": "Takedown: Red Sabre",
+            "appId": "236510",
+            "blurb": "a classic"
+          },
+          {
+            "name": "Battlefield 4™",
+            "appId": "1238860",
+            "blurb": "For me, the gunplay feels SO much different in a bad way from Battlefield 3, it was hard to play."
+          }
+        ],
+        "4": [
+          {
+            "name": "Starbound",
+            "appId": "211820"
+          },
+          {
+            "name": "Borderlands Game of the Year Enhanced",
+            "appId": "729040",
+            "blurb": "the randomized guns were cool"
+          },
+          {
+            "name": "Overcooked",
+            "appId": "448510",
+            "blurb": "PlateUp is better in every way #changemymind"
+          },
+          {
+            "name": "Stardew Valley",
+            "appId": "413150",
+            "blurb": "You'd think I'd like this game but I just was never able to get into it. It is not inspiring to me :("
+          },
+          {
+            "name": "DayZ",
+            "appId": "221100",
+            "blurb": "Like Rust, a little bit too hardcore / full-time job, very too slow."
+          },
+          {
+            "name": "Apex Legends™",
+            "appId": "1172470"
+          }
+        ],
+        "5": [
+          {
+            "name": "Garry's Mod",
+            "appId": "4000"
+          },
+          {
+            "name": "Terraria",
+            "appId": "105600"
+          },
+          {
+            "name": "Splitgate",
+            "appId": "677620"
+          },
+          {
+            "name": "Call of Duty®: Modern Warfare® 2 (2009)",
+            "appId": "10180",
+            "blurb": "Close second COD game from my childhood"
+          },
+          {
+            "name": "Grand Theft Auto V",
+            "appId": "271590",
+            "blurb": "The online mode was fun for a while early on!"
+          },
+          {
+            "name": "Rust",
+            "appId": "252490",
+            "blurb": "A game I wish I was good at, and it becomes a little bit too much of a required full time job to play well."
+          },
+          {
+            "name": "Content Warning",
+            "appId": "2881650"
+          },
+          {
+            "name": "Spectre Divide",
+            "appId": "2641470"
+          },
+          {
+            "name": "THE FINALS",
+            "appId": "2073850"
+          },
+          {
+            "name": "art of rally",
+            "appId": "550320"
+          },
+          {
+            "name": "Portal 2",
+            "appId": "620"
+          },
+          {
+            "name": "Cities: Skylines",
+            "appId": "255710"
+          }
+        ],
+        "6": [
+          {
+            "name": "Due Process",
+            "appId": "753650",
+            "blurb": "I followed the development of this game for 5 years before getting access to the alpha - and unfortunately it flopped."
+          },
+          {
+            "name": "Supreme Commander 2",
+            "appId": "40100"
+          },
+          {
+            "name": "Lethal Company",
+            "appId": "1966720"
+          },
+          {
+            "name": "Bean Battles",
+            "appId": "765410"
+          },
+          {
+            "name": "Call of Duty®: Modern Warfare® 3 (2011)",
+            "appId": "115300",
+            "blurb": "Peak COD for me as a kid - I can't play COD anymore, though"
+          },
+          {
+            "name": "Sid Meier's Civilization® V",
+            "appId": "8930"
+          },
+          {
+            "name": "osu!",
+            "appId": 0,
+            "blurb": "clicking circles is fun ya"
+          },
+          {
+            "name": "Stacklands",
+            "appId": "1948280"
+          },
+          {
+            "name": "N++ (NPLUSPLUS)",
+            "appId": "230270"
+          },
+          {
+            "name": "Warhammer® 40,000: Dawn of War® - Game of the Year Edition",
+            "appId": "4570",
+            "blurb": "Super nostalgic, played this a ton as a kid. I can still hear some of the voice lines in my head."
+          },
+          {
+            "name": "Hot Lava",
+            "appId": "382560",
+            "blurb": "parkour!"
+          },
+          {
+            "name": "Mercenaries 2: World in Flames",
+            "appId": 0,
+            "blurb": "I loved this game as a kid, I used to just collect vehicles and pile them up in my villa's yard"
+          },
+          {
+            "name": "Burnout™ Paradise Remastered",
+            "appId": "1238080",
+            "blurb": "I loved this game as a kid, the soundtrack was great"
+          }
+        ],
+        "7": [
+          {
+            "name": "ASTRONEER",
+            "appId": "361420"
+          },
+          {
+            "name": "Minecraft",
+            "appId": 0,
+            "blurb": "It's hard to play vanilla nowadays after putting so much time into it over the years"
+          },
+          {
+            "name": "7 Days to Die",
+            "appId": "251570"
+          },
+          {
+            "name": "Town of Salem",
+            "appId": "334230"
+          },
+          {
+            "name": "Warframe",
+            "appId": "230410"
+          },
+          {
+            "name": "Deep Rock Galactic",
+            "appId": "548430"
+          },
+          {
+            "name": "Duck Game",
+            "appId": "312530"
+          },
+          {
+            "name": "Balatro",
+            "appId": "2379780"
+          },
+          {
+            "name": "Overwatch® 2",
+            "appId": "2357570"
+          },
+          {
+            "name": "Sector's Edge",
+            "appId": 0,
+            "blurb": "RIP this game was really fun while it was alive"
+          }
+        ],
+        "8": [
+          {
+            "name": "Modded Minecraft",
+            "appId": 0
+          },
+          {
+            "name": "Wurm Unlimited",
+            "appId": "366220"
+          },
+          {
+            "name": "Omega Strikers",
+            "appId": "1869590"
+          },
+          {
+            "name": "Arma 3",
+            "appId": "107410"
+          },
+          {
+            "name": "Project Zomboid",
+            "appId": "108600"
+          },
+          {
+            "name": "VALORANT",
+            "appId": 0
+          },
+          {
+            "name": "Beat Saber",
+            "appId": "620980"
+          }
+        ],
+        "9": [
+          {
+            "name": "Rocket League",
+            "appId": "252950"
+          },
+          {
+            "name": "Escape from Tarkov",
+            "appId": 0
+          },
+          {
+            "name": "Battlefield 3",
+            "appId": 0
+          }
+        ],
+        "10": [
+          {
+            "name": "Factorio",
+            "appId": "427520"
+          },
+          {
             "name": "RimWorld",
-            "appId": 294100,
-            "blurb": "shoot bag guy"
+            "appId": "294100"
+          },
+          {
+            "name": "PlateUp!",
+            "appId": "1599600"
           }
         ]
       }
@@ -54,6 +588,252 @@
       "id": "1a56c0c6-f770-4752-a2d6-6976918c1622",
       "bio": "im dad",
       "ratings": {
+        "3": [
+          {
+            "name": "Project Zomboid",
+            "appId": 108600
+          },
+          {
+            "name": "Smalland: Survive the Wilds",
+            "appId": 768200
+          }
+        ],
+        "4": [
+          {
+            "name": "Above Snakes",
+            "appId": 1589120
+          },
+          {
+            "name": "Aquatico",
+            "appId": 1812300
+          },
+          {
+            "name": "SpellForce: Conquest of Eo",
+            "appId": 1581770
+          },
+          {
+            "name": "Above Snakes",
+            "appId": 1589120
+          }
+        ],
+        "5": [
+          {
+            "name": "Gord",
+            "appId": 1351210
+          },
+          {
+            "name": "Last Epoch",
+            "appId": 899770
+          },
+          {
+            "name": "Legendary Hoplite",
+            "appId": 1479810
+          },
+          {
+            "name": "New Cycle",
+            "appId": 2198510
+          },
+          {
+            "name": "Oxygen",
+            "appId": 2061430
+          },
+          {
+            "name": "Returnal",
+            "appId": 1649240
+          },
+          {
+            "name": "Stranded: Alien Dawn",
+            "appId": 1324130
+          },
+          {
+            "name": "Surviving the Abyss",
+            "appId": 1254320
+          }
+        ],
+        "6": [
+          {
+            "name": "Age of Wonders 4",
+            "appId": 1669000
+          },
+          {
+            "name": "Dark Envoy",
+            "appId": 945770
+          },
+          {
+            "name": "Desynced: Autonomous Colony Simulator",
+            "appId": 1450900
+          },
+          {
+            "name": "Dungeons 4",
+            "appId": 1643310
+          },
+          {
+            "name": "Forever Skies",
+            "appId": 1641960
+          },
+          {
+            "name": "Nightingale",
+            "appId": 1928980
+          },
+          {
+            "name": "Plan B: Terraform",
+            "appId": 1894430
+          },
+          {
+            "name": "Portal: Revolution",
+            "appId": 601360
+          },
+          {
+            "name": "Survival: Fountain of Youth",
+            "appId": 1967630
+          }
+        ],
+        "7": [
+          {
+            "name": "Against the Storm",
+            "appId": 1336490
+          },
+          {
+            "name": "Age of Darkness: Final Stand",
+            "appId": 1426450
+          },
+          {
+            "name": "Aliens: Dark Descent",
+            "appId": 1150440
+          },
+          {
+            "name": "Astro Colony",
+            "appId": 1614550
+          },
+          {
+            "name": "Atrio: The Dark Wild",
+            "appId": 1125390
+          },
+          {
+            "name": "Baldur's Gate 3",
+            "appId": 1086940
+          },
+          {
+            "name": "Deep Rock Galactic: Survivor",
+            "appId": 2321470
+          },
+          {
+            "name": "Enshrouded",
+            "appId": 1203620
+          },
+          {
+            "name": "Gloomhaven",
+            "appId": 780290
+          },
+          {
+            "name": "Industries of Titan",
+            "appId": 427940
+          },
+          {
+            "name": "Lords of the Fallen",
+            "appId": 1501750
+          },
+          {
+            "name": "Medieval Dynasty",
+            "appId": 1129580
+          },
+          {
+            "name": "Mob Factory",
+            "appId": 2182630
+          },
+          {
+            "name": "Night of the Dead",
+            "appId": 1377380
+          },
+          {
+            "name": "The Outer Worlds",
+            "appId": 578650
+          },
+          {
+            "name": "Oxygen Not Included",
+            "appId": 457140
+          },
+          {
+            "name": "Pacific Drive",
+            "appId": 1458140
+          },
+          {
+            "name": "Red Dead Redemption 2",
+            "appId": 1174180
+          },
+          {
+            "name": "Warhammer 40,000: Chaos Gate - Daemonhunters",
+            "appId": 1611910
+          }
+        ],
+        "8": [
+          {
+            "name": "Breathedge",
+            "appId": 738520
+          },
+          {
+            "name": "Divinity: Original Sin 2 - Definitive Edition",
+            "appId": 435150
+          },
+          {
+            "name": "Dyson Sphere Program",
+            "appId": 1366540
+          },
+          {
+            "name": "Horizon Zero Dawn™ Complete Edition",
+            "appId": 1151640
+          },
+          {
+            "name": "No Rest for the Wicked",
+            "appId": 1371980
+          },
+          {
+            "name": "RAILGRADE",
+            "appId": 1355090
+          },
+          {
+            "name": "RimWorld",
+            "appId": 294100
+          },
+          {
+            "name": "Sons Of The Forest",
+            "appId": 1326470
+          },
+          {
+            "name": "Starfield",
+            "appId": 1716740
+          },
+          {
+            "name": "Subnautica: Below Zero",
+            "appId": 848450
+          },
+          {
+            "name": "V Rising",
+            "appId": 1604030
+          }
+        ],
+        "9": [
+          {
+            "name": "Frostpunk",
+            "appId": 323190
+          },
+          {
+            "name": "Green Hell",
+            "appId": 815370
+          },
+          {
+            "name": "IXION",
+            "appId": 1113120
+          },
+          {
+            "name": "Remnant: From the Ashes",
+            "appId": 617290
+          },
+          {
+            "name": "REMNANT II®",
+            "appId": 1282100
+          }
+        ],
         "10": [
           {
             "name": "7 Days to Die",
@@ -114,252 +894,6 @@
           {
             "name": "The Witcher 3: Wild Hunt",
             "appId": 292030
-          }
-        ],
-        "9": [
-          {
-            "name": "Frostpunk",
-            "appId": 323190 
-          },
-          {
-            "name": "Green Hell",
-            "appId": 815370
-          },
-          {
-            "name": "IXION",
-            "appId": 1113120
-          },
-          {
-            "name": "Remnant: From the Ashes",
-            "appId": 617290
-          },
-          {
-            "name": "REMNANT II®",
-            "appId": 1282100
-          }
-        ],
-        "8": [
-          {
-            "name": "Breathedge",
-            "appId": 738520 
-          },
-          {
-            "name": "Divinity: Original Sin 2 - Definitive Edition",
-            "appId": 435150
-          },
-          {
-            "name": "Dyson Sphere Program",
-            "appId": 1366540
-          },
-          {
-            "name": "Horizon Zero Dawn™ Complete Edition",
-            "appId": 1151640
-          },
-          {
-            "name": "No Rest for the Wicked",
-            "appId": 1371980
-          },
-          {
-            "name": "RAILGRADE",
-            "appId": 1355090
-          },
-          {
-            "name": "RimWorld",
-            "appId": 294100
-          },
-          {
-            "name": "Sons Of The Forest",
-            "appId": 1326470
-          },
-          {
-            "name": "Starfield",
-            "appId": 1716740
-          },
-          {
-            "name": "Subnautica: Below Zero",
-            "appId": 848450
-          },
-          {
-            "name": "V Rising",
-            "appId": 1604030
-          }
-        ],
-        "7": [
-          {
-            "name": "Against the Storm",
-            "appId": 1336490
-          },
-          {
-            "name": "Age of Darkness: Final Stand",
-            "appId": 1426450
-          },
-          {
-            "name": "Aliens: Dark Descent",
-            "appId": 1150440
-          },
-          {
-            "name": "Astro Colony",
-            "appId": 1614550
-          },
-          {
-            "name": "Atrio: The Dark Wild",
-            "appId": 1125390
-          },
-          {
-            "name": "Baldur's Gate 3",
-            "appId": 1086940 
-          },
-          {
-            "name": "Deep Rock Galactic: Survivor",
-            "appId": 2321470
-          },
-          {
-            "name": "Enshrouded",
-            "appId": 1203620
-          },
-          {
-            "name": "Gloomhaven",
-            "appId": 780290
-          },
-          {
-            "name": "Industries of Titan",
-            "appId": 427940
-          },
-          {
-            "name": "Lords of the Fallen",
-            "appId": 1501750
-          },
-          {
-            "name": "Medieval Dynasty",
-            "appId": 1129580
-          },
-          {
-            "name": "Mob Factory",
-            "appId": 2182630
-          },
-          {
-            "name": "Night of the Dead",
-            "appId": 1377380
-          },
-          {
-            "name": "The Outer Worlds",
-            "appId": 578650
-          },
-          {
-            "name": "Oxygen Not Included",
-            "appId": 457140
-          },
-          {
-            "name": "Pacific Drive",
-            "appId": 1458140
-          },
-          {
-            "name": "Red Dead Redemption 2",
-            "appId": 1174180
-          },
-          {
-            "name": "Warhammer 40,000: Chaos Gate - Daemonhunters",
-            "appId": 1611910
-          }
-        ],
-        "6": [
-          {
-            "name": "Age of Wonders 4",
-            "appId": 1669000
-          },
-          {
-            "name": "Dark Envoy",
-            "appId": 945770
-          },
-          {
-            "name": "Desynced: Autonomous Colony Simulator",
-            "appId": 1450900
-          },
-          {
-            "name": "Dungeons 4",
-            "appId": 1643310
-          },
-          {
-            "name": "Forever Skies",
-            "appId": 1641960
-          },
-          {
-            "name": "Nightingale",
-            "appId": 1928980
-          },
-          {
-            "name": "Plan B: Terraform",
-            "appId": 1894430
-          },
-          {
-            "name": "Portal: Revolution",
-            "appId": 601360
-          },
-          {
-            "name": "Survival: Fountain of Youth",
-            "appId": 1967630
-          }
-        ],
-        "5": [
-          {
-            "name": "Gord",
-            "appId": 1351210
-          },
-          {
-            "name": "Last Epoch",
-            "appId": 899770
-          },
-          {
-            "name": "Legendary Hoplite",
-            "appId": 1479810
-          },
-          {
-            "name": "New Cycle",
-            "appId": 2198510
-          },
-          {
-            "name": "Oxygen",
-            "appId": 2061430
-          },
-          {
-            "name": "Returnal",
-            "appId": 1649240
-          },
-          {
-            "name": "Stranded: Alien Dawn",
-            "appId": 1324130
-          },
-          {
-            "name": "Surviving the Abyss",
-            "appId": 1254320
-          }
-        ],
-        "4": [
-          {
-            "name": "Above Snakes",
-            "appId": 1589120
-          },
-          {
-            "name": "Aquatico",
-            "appId": 1812300
-          },
-          {
-            "name": "SpellForce: Conquest of Eo",
-            "appId": 1581770
-          },
-          {
-            "name": "Above Snakes",
-            "appId": 1589120
-          }
-        ],
-        "3": [
-          {
-            "name": "Project Zomboid",
-            "appId": 108600
-          },
-          {
-            "name": "Smalland: Survive the Wilds",
-            "appId": 768200 
           }
         ]
       }
