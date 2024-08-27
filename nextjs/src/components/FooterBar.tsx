@@ -5,6 +5,7 @@ import styles from "../app/main.module.scss";
 import footerStyles from "./FooterBar.module.scss";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import { GitHub } from "react-feather";
 
 export default function FooterBar() {
   const pathname = usePathname();
@@ -31,6 +32,13 @@ export default function FooterBar() {
           </Link> */}
         </div>
         <div className={footerStyles["footer-right"]}>
+          <a
+            href={"https://github.com/ckhawks/games-list"}
+            className={footerStyles["footer-link"]}
+            target="_blank"
+          >
+            <GitHub size={14} />
+          </a>
           <ThemeToggle />
         </div>
       </div>

@@ -9,6 +9,8 @@ import { db } from "@/util/db/db";
 import { redirect } from "next/navigation";
 import FooterBar from "@/components/FooterBar";
 import { ListFilters } from "@/components/ListFilters";
+import Head from "next/head";
+import { Metadata } from "next";
 
 const player = {
   username: "Stellaric",
@@ -60,6 +62,42 @@ const player = {
   ],
 };
 
+function getTimeString(date: Date): string {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hours: "",
+  };
+
+  const hours = 5;
+  date.setHours(date.getHours() - hours);
+  return date.toLocaleDateString("en-US", options as unknown as any);
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}): Promise<Metadata> {
+  const playerSearch = await db(
+    `
+    SELECT * FROM "Player"
+    WHERE LOWER(username) = $1`,
+    [params.username]
+  );
+
+  let username = params.username;
+  if (playerSearch.length == 1) {
+    username = playerSearch[0].username;
+  }
+
+  return {
+    title: `${username}'s Ratings`,
+  };
+}
+
 export default async function PlayerListPage({
   params,
 }: {
@@ -81,11 +119,47 @@ export default async function PlayerListPage({
     return <>404</>;
   }
 
-  // const player = playerSearch[0];
+  const player = playerSearch[0];
 
-  const usernameLowered = params.username.toLowerCase();
+  const games = await db(
+    `
+      SELECT 
+          g.id,
+          g.name,
+          g."storeURL",
+          g."storeName",
+          g."releaseDate",
+          g."descriptionShort",
+          pg.rating AS "rating",
+          g."artworkS3Key",
+          pg."reviewBlurb",
+          pg."hoursPlayed",
+          g."steamReviewPercent",
+          pg."createdAt" AS "ratingDate",
+          ARRAY_AGG(t.name ORDER BY gt.weight DESC) AS "tags"
+      FROM 
+          "PlayerGame" pg
+      JOIN 
+          "Game" g ON g.id = pg."gameId"
+      LEFT JOIN 
+          "GameTag" gt ON gt."gameId" = g.id
+      LEFT JOIN 
+          "Tag" t ON t.id = gt."tagId"
+      WHERE 
+          pg."playerId" = $1
+          AND pg."deletedAt" IS NULL
+          AND g."deletedAt" IS NULL
+          AND gt."deletedAt" IS NULL
+          AND t."deletedAt" IS NULL
+      GROUP BY 
+          g.id, pg.rating, pg."reviewBlurb", pg."hoursPlayed", pg."createdAt"
+      ORDER BY 
+          pg.rating DESC, pg."createdAt" DESC;
+    `,
+    [playerSearch[0].id]
+  );
+  console.log(games);
 
-  // search DB for username lower()
   return (
     <>
       <div className={styles["wrapper"]}>
@@ -95,19 +169,19 @@ export default async function PlayerListPage({
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               <h1>{player.username}&apos;s Games</h1>
               <span style={{ color: "var(--sub-text-color)" }}>
-                Last updated {player.listLastUpdatedAt.toString()}
+                Last updated {getTimeString(player.listLastUpdatedAt)}
               </span>
             </div>
-            <p>{player.profileBlurb}</p>
+            <p dangerouslySetInnerHTML={{ __html: player.profileBlurb }}></p>
             <div className={styles["list-filter-controls"]}>
               <ListFilters />
               <span className={"subtext"}>
-                {player.games.length} total games
+                {games ? games.length : 0} total games
               </span>
             </div>
             <div className={styles["game-list-wrapper"]}>
-              {player.games &&
-                player.games.map((game, index) => {
+              {games &&
+                games.map((game, index) => {
                   return (
                     <div className={styles["game-list-item"]} key={game.name}>
                       <div className={styles["game-list-top"]}>
@@ -124,7 +198,7 @@ export default async function PlayerListPage({
                         </div>
                         <div className={styles["game-list-info"]}>
                           <Image
-                            src={"/" + game.artworkS3Key}
+                            src={"/api/resource/" + game.artworkS3Key}
                             width={200}
                             height={100}
                             style={{ borderRadius: "4px", objectFit: "cover" }}
@@ -135,31 +209,43 @@ export default async function PlayerListPage({
                               <div className={styles["game-title"]}>
                                 {game.name}
                               </div>
-                              <Link
-                                href={game.storeURL}
-                                className={"external-link"}
-                              >
-                                {game.storeName}
-                                <ExternalLink size={14} />
-                              </Link>
+                              {game.storeURL && (
+                                <Link
+                                  href={game.storeURL}
+                                  className={"external-link"}
+                                >
+                                  {game.storeName}
+                                  <ExternalLink size={14} />
+                                </Link>
+                              )}
+
                               <div
                                 className={"subtext roww"}
                                 style={{ fontSize: "14px" }}
                               >
-                                Released: {game.releaseDate}
+                                Released:{" "}
+                                {game.releaseDate
+                                  ? getTimeString(game.releaseDate)
+                                  : "Unknown"}
                               </div>
                             </div>
+                            {game.descriptionShort && (
+                              <div className={styles["game-info-description"]}>
+                                {game.descriptionShort}
+                              </div>
+                            )}
+
                             <div
                               className={`${styles["game-info-2tags"]} roww`}
                             >
                               {game.tags &&
-                                game.tags.map((tag, index) => {
+                                game.tags.slice(0, 7).map((tag, index) => {
                                   return (
                                     <div
                                       className={`badge grey small`}
-                                      key={tag.name}
+                                      key={tag}
                                     >
-                                      {tag.name}
+                                      {tag}
                                     </div>
                                   );
                                 })}
@@ -174,29 +260,35 @@ export default async function PlayerListPage({
                                   size={14}
                                   fill={"var(--accent-dark-color)"}
                                 />
-                                {game.ratings &&
+                                {game.steamReviewPercent && (
+                                  <span>Steam: {game.steamReviewPercent}%</span>
+                                )}
+
+                                {/* {game.ratings &&
                                   game.ratings.map((rating, index) => {
                                     return (
                                       <span key={rating.name}>
                                         {rating.name}: {rating.rating}%
                                       </span>
                                     );
-                                  })}
+                                  })} */}
                               </div>
-                              <div className={`${styles["game-extras"]} roww`}>
+                              {/* <div className={`${styles["game-extras"]} roww`}>
                                 <Clock size={14} /> {game.hoursPlayed}h
                               </div>
                               <div className={`${styles["game-extras"]} roww`}>
                                 <ShoppingCart size={14} />{" "}
                                 {game.estimatedCopiesSold}
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className={styles["game-list-bottom"]}>
-                        <i>&quot;{game.reviewBlurb}&quot;</i>
-                      </div>
+                      {game.reviewBlurb && (
+                        <div className={styles["game-list-bottom"]}>
+                          <i>&quot;{game.reviewBlurb}&quot;</i>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
