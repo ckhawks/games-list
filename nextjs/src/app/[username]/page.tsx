@@ -239,16 +239,18 @@ export default async function PlayerListPage({
                               className={`${styles["game-info-2tags"]} roww`}
                             >
                               {game.tags &&
-                                game.tags.slice(0, 7).map((tag, index) => {
-                                  return (
-                                    <div
-                                      className={`badge grey small`}
-                                      key={tag}
-                                    >
-                                      {tag}
-                                    </div>
-                                  );
-                                })}
+                                game.tags
+                                  .slice(0, 7)
+                                  .map((tag: any, index: number) => {
+                                    return (
+                                      <div
+                                        className={`badge grey small`}
+                                        key={tag}
+                                      >
+                                        {tag}
+                                      </div>
+                                    );
+                                  })}
                             </div>
                             <div
                               className={`${styles["game-info-3extra"]} roww`}
