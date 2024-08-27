@@ -1,36 +1,33 @@
 import { input, select, search } from '@inquirer/prompts';
 import { db } from './util/db/db'
-
-import fs from 'fs/promises';
-import path from 'path';
 // import cheerio from 'cheerio';
 const cheerio = require('cheerio');
 
-import dataJson from './data/ratings.json';
-
-let data = dataJson;
+let players = [];
 
 async function start() {
   console.log("Welcome to Data Wizard!");
   console.log("");
   console.log("Fetching players...");
   // select a player
+  const playersResponse = await db(`
+      SELECT * FROM "Player" 
+    `, []
+  )
 
-
-  const players = data.players;
+  players = playersResponse;
 
   const playerChoices: any[] = players.map((player) => {
     return {
-      name: player.name,
-      value: player.name,
-      description: "Add game ratings to " + player.name
+      name: player.username,
+      value: player.username,
+      description: "Add game ratings to " + player.username
     }
   })
 
  
   const playerSelection: any = await select({ message: 'Select a player',
-    choices: [
-      ...playerChoices,
+    choices: [...playerChoices,
       {
         name: "Add new player",
         value: "__newPlayer",
@@ -56,10 +53,10 @@ async function start() {
 }
 
 async function playerManagement(playerUsername: string) {
-  let player = data.players.find(player => player.name === playerUsername);
+  let player = players.find(player => player.username === playerUsername);
 
-  // console.log(player);
-  console.log("Now managing " + player.name);
+  console.log(player);
+  console.log("Now managing " + player.username);
   const choiceSelection: any = await select({ message: 'Wtf you wanna do?',
     choices: [
       {
@@ -146,84 +143,100 @@ async function addRating(player: any) {
 
   if (answer === "notpresent") {
     console.log("We'll make a new game.")
-    await makeNewGameThenAddRating(player);
-  } else {
-    await addGameRating(player, answer)
   }
 }
 
-async function makeNewGameThenAddRating(player) {
-  const gameNameAnswer = await input({ message: 'Enter the full name of the game' });
+// function mainMenu() {
+//   inquirer.prompt([
+//       {
+//           type: 'list',
+//           name: 'action',
+//           message: 'Main Menu - Choose an option:',
+//           choices: ['Home Mode', 'Search Players', 'Exit']
+//       }
+//   ]).then(answers => {
+//       switch (answers.action) {
+//           case 'Home Mode':
+//               homeMode();
+//               break;
+//           case 'Search Players':
+//               searchPlayers();
+//               break;
+//           case 'Exit':
+//               console.log('Exiting...');
+//               process.exit();
+//       }
+//   });
+// }
 
-  await addGameRating(player, {
-    title: gameNameAnswer,
-    appId: 0
-  })
-}
+// function homeMode() {
+//   inquirer.prompt([
+//       {
+//           type: 'list',
+//           name: 'homeAction',
+//           message: `Home Mode - Current Player: ${selectedPlayer || 'None'} - Choose an option:`,
+//           choices: ['Switch Player', 'Go Back']
+//       }
+//   ]).then(answers => {
+//       if (answers.homeAction === 'Switch Player') {
+//           selectPlayer();
+//       } else {
+//           mainMenu();
+//       }
+//   });
+// }
 
-import { number } from '@inquirer/prompts';
+// function searchPlayers() {
+//   inquirer.prompt([
+//       {
+//           type: 'input',
+//           name: 'searchTerm',
+//           message: 'Search for a player:'
+//       }
+//   ]).then(answers => {
+//       const results = players.filter(player => player.toLowerCase().includes(answers.searchTerm.toLowerCase()));
+//       if (results.length > 0) {
+//           confirmSearchResults(results);
+//       } else {
+//           console.log('No players found. Returning to Main Menu.');
+//           mainMenu();
+//       }
+//   });
+// }
 
-async function addGameRating(player: any, gameData: any) {
-  // console.log("gameData: ", gameData);
+// function confirmSearchResults(results) {
+//   inquirer.prompt([
+//       {
+//           type: 'list',
+//           name: 'selectedResult',
+//           message: 'Select a player from the search results:',
+//           choices: [...results, 'Cancel']
+//       }
+//   ]).then(answers => {
+//       if (answers.selectedResult !== 'Cancel') {
+//           selectedPlayer = answers.selectedResult;
+//           console.log(`Selected Player: ${selectedPlayer}`);
+//       }
+//       mainMenu();
+//   });
+// }
 
-  const ratingAnswer = await select({
-    message: 'What do you rate this game?',
-    choices: [
-      {name: '10', value: 10},
-      {name: '9', value: 9},
-      {name: '8', value: 8},
-      {name: '7', value: 7},
-      {name: '6', value: 6},
-      {name: '5', value: 5},
-      {name: '4', value: 4},
-      {name: '3', value: 3},
-      {name: '2', value: 2},
-      {name: '1', value: 1}
-    ]
-  });
-
-  // find player index to use in querying 'data' variable
-  let playerIndex = data.players.findIndex(ply => ply.name === player.name);
-  let playerRatings = data.players[playerIndex].ratings;
-
-  if (!playerRatings[ratingAnswer]) {
-    playerRatings[ratingAnswer] = []; // Initialize as an empty array if not present
-  }
-
-  playerRatings[ratingAnswer].push({
-    name: gameData.title,
-    appId: gameData.appId
-  });
-  
-  // console.log(data.players[playerIndex].ratings);
-  
-  // if(!(data.players[playerIndex].ratings as any).has(ratingAnswer)) {
-  //   (data.players[playerIndex].ratings as any).set(ratingAnswer, [{
-  //     name: gameData.title,
-  //     appId: gameData.appId
-  //   }])
-  // } else {
-  //   (data.players[playerIndex].ratings as any).set(ratingAnswer, [...data.players[playerIndex].ratings[ratingAnswer], {
-  //     name: gameData.title,
-  //     appId: gameData.appId
-  //   }])
-  // }
-  // console.log(data.players[playerIndex].ratings);
-  
-  await saveRatingsJson()
-  console.log(`Added ${ratingAnswer} for ${gameData.title} for ${data.players[playerIndex].name}`);
-  await playerManagement(data.players[playerIndex].name);
-}
-
-async function saveRatingsJson() {
-  const filePath = path.resolve(__dirname, './data/ratings.json');
-  try {
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
-    console.log('Ratings saved successfully.');
-  } catch (error) {
-    console.error('Error saving ratings:', error);
-  }
-}
+// function selectPlayer() {
+//   inquirer.prompt([
+//       {
+//           type: 'list',
+//           name: 'player',
+//           message: 'Select a player to switch to:',
+//           choices: [...players, 'Cancel']
+//       }
+//   ]).then(answers => {
+//       if (answers.player !== 'Cancel') {
+//           selectedPlayer = answers.player;
+//           console.log(`Switched to Player: ${selectedPlayer}`);
+//       }
+//       homeMode();
+//   });
+// }
 
 // Start the application
 start();
