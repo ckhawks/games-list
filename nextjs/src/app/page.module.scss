@@ -50,6 +50,13 @@
     box-shadow: var(--box-shadow-color) 0px 7px 29px 0px;
     cursor: pointer;
   }
+
+  &.home-player-row-global {
+    height: 60px;
+    align-items: center;
+    background-color: var(--hover-background-color);
+    // border-radius: 100px;
+  }
 }
 
 .home-player-row-identifier {

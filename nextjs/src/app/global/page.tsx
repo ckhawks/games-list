@@ -2,13 +2,11 @@ import { Image, Row } from "react-bootstrap";
 import styles from "../page.module.scss";
 import BackButton from "@/components/BackButton";
 import Link from "next/link";
-import { ExternalLink, Star } from "react-feather";
+import { ExternalLink, List, Star } from "react-feather";
 import { db } from "@/util/db/db";
-import { redirect } from "next/navigation";
 import FooterBar from "@/components/FooterBar";
 import { ListFilters } from "@/components/ListFilters";
 import { Metadata } from "next";
-import NoSsr from "@/components/NoSsr";
 
 export const revalidate = 60;
 
@@ -31,82 +29,66 @@ export async function generateMetadata({
 }: {
   params: { username: string };
 }): Promise<Metadata> {
-  const playerSearch = await db(
-    `
-    SELECT * FROM "Player"
-    WHERE LOWER(username) = $1`,
-    [params.username]
-  );
-
-  let username = params.username;
-  if (playerSearch.length == 1) {
-    username = playerSearch[0].username;
-  }
-
   return {
-    title: `${username}'s Ratings`,
+    title: `Combined Ratings`,
   };
 }
 
-export default async function PlayerListPage({
-  params,
-}: {
-  params: { username: string };
-}) {
-  if (params.username === null) {
-    return <>404</>;
-  }
-
-  const playerSearch = await db(
-    `
-    SELECT * FROM "Player"
-    WHERE LOWER(username) = $1`,
-    [params.username]
-  );
-
-  if (playerSearch.length != 1) {
-    redirect("/");
-    return <>404</>;
-  }
-
-  const player = playerSearch[0];
-
+export default async function CombinedListPage() {
   const games = await db(
     `
+    WITH RaterInfo AS (
       SELECT 
-          g.id,
-          g.name,
-          g."storeURL",
-          g."storeName",
-          g."releaseDate",
-          g."descriptionShort",
-          pg.rating AS "rating",
-          g."artworkS3Key",
-          pg."reviewBlurb",
-          pg."hoursPlayed",
-          g."steamReviewPercent",
-          pg."createdAt" AS "ratingDate",
-          ARRAY_AGG(t.name ORDER BY gt.weight DESC) AS "tags"
+          pg."gameId",
+          jsonb_agg(
+              jsonb_build_object('playerId', p.id, 'username', p.username, 'rating', pg.rating)
+              ORDER BY pg.rating DESC, p.username ASC
+          ) AS raters,
+          AVG(pg.rating) AS avg_rating,
+          COUNT(DISTINCT p.id) AS rater_count
       FROM 
           "PlayerGame" pg
       JOIN 
-          "Game" g ON g.id = pg."gameId"
-      LEFT JOIN 
-          "GameTag" gt ON gt."gameId" = g.id
-      LEFT JOIN 
-          "Tag" t ON t.id = gt."tagId"
+          "Player" p ON pg."playerId" = p.id
       WHERE 
-          pg."playerId" = $1
-          AND pg."deletedAt" IS NULL
-          AND g."deletedAt" IS NULL
-          AND gt."deletedAt" IS NULL
-          AND t."deletedAt" IS NULL
+          pg."deletedAt" IS NULL
+          AND p."deletedAt" IS NULL
       GROUP BY 
-          g.id, pg.rating, pg."reviewBlurb", pg."hoursPlayed", pg."createdAt"
-      ORDER BY 
-          pg.rating DESC, pg."createdAt" DESC;
+          pg."gameId"
+  )
+  SELECT 
+      g.id,
+      g.name,
+      g."storeURL",
+      g."storeName",
+      g."releaseDate",
+      g."descriptionShort",
+      ri.avg_rating AS "averageRating",
+      g."artworkS3Key",
+      g."steamReviewPercent",
+      ARRAY_AGG(DISTINCT t.name) AS "tags",
+      ri.rater_count AS "ratingCount",
+      ri.raters AS "raters"
+  FROM 
+      "Game" g
+  JOIN 
+      RaterInfo ri ON g.id = ri."gameId"
+  LEFT JOIN 
+      "GameTag" gt ON gt."gameId" = g.id
+  LEFT JOIN 
+      "Tag" t ON t.id = gt."tagId"
+  WHERE 
+      g."deletedAt" IS NULL
+      AND gt."deletedAt" IS NULL
+      AND t."deletedAt" IS NULL
+  GROUP BY 
+      g.id, ri.avg_rating, ri.rater_count, ri.raters
+  HAVING 
+      ri.rater_count > 1
+  ORDER BY 
+      ri.avg_rating DESC, g."releaseDate" DESC;
     `,
-    [playerSearch[0].id]
+    []
   );
 
   return (
@@ -116,19 +98,12 @@ export default async function PlayerListPage({
           <Row>
             <BackButton to="/" text={"Back"} />
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-              <h1>{player.username}&apos;s Games</h1>
-              <span style={{ color: "var(--sub-text-color)" }}>
+              <h1>Combined Rankings</h1>
+              {/* <span style={{ color: "var(--sub-text-color)" }}>
                 Last updated {getTimeString(player.listLastUpdatedAt)}
-              </span>
+              </span> */}
             </div>
-            <div
-              style={{ marginBottom: "16px" }}
-              dangerouslySetInnerHTML={{
-                __html: player.profileBlurb,
-              }}
-            />
-            {/* <NoSsr></NoSsr> */}
-
+            <p>Only including games with at least 2 people rating them</p>
             <div className={styles["list-filter-controls"]}>
               <ListFilters />
               <span className={"subtext"}>
@@ -142,7 +117,7 @@ export default async function PlayerListPage({
                     <div className={styles["game-list-item"]} key={game.name}>
                       <div className={styles["game-list-top"]}>
                         <div className={styles["game-list-score"]}>
-                          {game.rating}
+                          {Math.round(game.averageRating)}
                           <div
                             className={`${styles["game-extras"]} roww`}
                             style={{
@@ -211,6 +186,32 @@ export default async function PlayerListPage({
                             <div
                               className={`${styles["game-info-3extra"]} roww`}
                             >
+                              <div
+                                className={`${styles["review-badge"]} badge grey outline small roww`}
+                              >
+                                <List
+                                  size={14}
+                                  fill={"var(--accent-dark-color)"}
+                                />
+                                {game.raters &&
+                                  // @ts-ignore
+                                  game.raters.map((player) => {
+                                    return (
+                                      <span key={player.playerId}>
+                                        {player.username}: {player.rating}
+                                      </span>
+                                    );
+                                  })}
+
+                                {/* {game.ratings &&
+                                  game.ratings.map((rating, index) => {
+                                    return (
+                                      <span key={rating.name}>
+                                        {rating.name}: {rating.rating}%
+                                      </span>
+                                    );
+                                  })} */}
+                              </div>
                               {game.steamReviewPercent && (
                                 <div
                                   className={`${styles["review-badge"]} badge blue small roww`}
@@ -235,6 +236,7 @@ export default async function PlayerListPage({
                                   })} */}
                                 </div>
                               )}
+
                               {/* <div className={`${styles["game-extras"]} roww`}>
                                 <Clock size={14} /> {game.hoursPlayed}h
                               </div>
@@ -261,4 +263,12 @@ export default async function PlayerListPage({
       <FooterBar />
     </>
   );
+
+  //   const list = ['h', 'e', 'l', 'l', 'o'];
+  // list.map((currElement, index) => {
+  //   console.log("The current iteration is: " + index);
+  //   console.log("The current element is: " + currElement);
+  //   console.log("\n");
+  //   return currElement; //equivalent to list[index]
+  // });
 }

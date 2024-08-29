@@ -1,70 +1,11 @@
-"use server";
-
 import styles from "./page.module.scss";
-import ThemeToggle from "@/components/ThemeToggle";
 import { Col, Row } from "react-bootstrap";
-import { ArrowRight } from "react-feather";
+import { ArrowRight, Link as LinkIcon } from "react-feather";
 import Link from "next/link";
 import { db } from "@/util/db/db";
-import { getTag } from "@/constants/tags";
 import FooterBar from "@/components/FooterBar";
 
-// const players = [
-//   {
-//     username: "Stellaric",
-//     avatarS3Key: "/avatars/stellaric.png",
-//     tags: [
-//       {
-//         name: "Automation",
-//       },
-//       {
-//         name: "Base-building",
-//       },
-//       {
-//         name: "Competitive",
-//       },
-//       {
-//         name: "First-person Shooter",
-//       },
-//     ],
-//   },
-//   {
-//     username: "Nrohgnol",
-//     avatarS3Key: "/avatars/nrohgnol.jpeg",
-//     tags: [
-//       {
-//         name: "Automation",
-//       },
-//       {
-//         name: "Base-building",
-//       },
-//       {
-//         name: "Competitive",
-//       },
-//       {
-//         name: "First-person Shooter",
-//       },
-//     ],
-//   },
-//   {
-//     username: "DeadNotSleeping",
-//     avatarS3Key: "/avatars/deadnotsleeping.jpeg",
-//     tags: [
-//       {
-//         name: "Automation",
-//       },
-//       {
-//         name: "Base-building",
-//       },
-//       {
-//         name: "Competitive",
-//       },
-//       {
-//         name: "First-person Shooter",
-//       },
-//     ],
-//   },
-// ];
+export const revalidate = 60;
 
 export default async function HomePlayerList() {
   const playersUnsorted = await db(
@@ -109,6 +50,35 @@ export default async function HomePlayerList() {
             </Col>
           </Row>
           <div className={styles["home-player-rows"]}>
+            <Link
+              href={"/global"}
+              className={`${styles["home-player-row"]} ${styles["home-player-row-global"]}`}
+            >
+              <div>
+                <LinkIcon size={14} style={{ marginRight: "8px" }} />
+                View the average rankings of everyone&apos;s lists
+              </div>
+              {/* <div className={styles["home-player-row-identifier"]}>
+                <img
+                  className={styles["avatar"]}
+                  width={48}
+                  height={48}
+                  src={"/api/resource/" + player.avatarS3Key}
+                  alt={player.username}
+                />
+              </div> */}
+              {/* <div className={styles["home-player-row-tags"]}>
+                {player.tags &&
+                  player.tags.map((tag: any) => (
+                    <div className={"badge grey"} key={tag.name}>
+                      {tag.name}
+                    </div>
+                  ))}
+              </div> */}
+              <div className={styles["home-player-row-arrow"]}>
+                <ArrowRight size={24} />
+              </div>
+            </Link>
             {players &&
               players.map((player) => {
                 return (
