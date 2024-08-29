@@ -254,6 +254,7 @@ export default async function PlayerListPage({
                     </div>
                   );
                 })}
+              {games.length === 0 && <div>No ratings found. :(</div>}
             </div>
           </Row>
         </div>
