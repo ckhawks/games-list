@@ -61,9 +61,25 @@ be torn down.
 
 ---
 
-## Stage 2 — Auth & ownership
+## Stage 2 — Auth & ownership  🚧 (login flow built)
 
 The single biggest addition. Everything downstream depends on "who owns which list."
+
+**Status:** Steam OpenID login implemented with a custom lightweight flow (not NextAuth —
+Steam is OpenID 2.0, which Auth.js models poorly; Steam is our only provider). Built:
+- `AppUser` table + `Player.ownerUserId` (unique, FK) — one list per user.
+- `openid` (RelyingParty) for the Steam dance; `jose`-signed JWT session in an httpOnly
+  cookie; `SESSION_SECRET` in `.env`.
+- Routes: `/api/auth/steam/login`, `/api/auth/steam/callback`, `/api/auth/logout`.
+- `getSession()` + `getSessionPlayer()` / `currentUserOwnsPlayer()` ownership helpers
+  (ready for Stage 3 to gate edits).
+- `AuthControl` in the layout (sign-in button ↔ persona + sign-out).
+- Auto-claim: on login, an unowned Player whose `steamId64` matches is linked to the user.
+  All 7 existing players have SteamIDs backfilled, so each is claimable by its owner.
+
+**Remaining in Stage 2:** end-to-end browser login test; decide whether new (non-matching)
+logins should auto-create an empty Player or land on a "set up your list" screen (ties into
+Stage 3).
 
 - **Auth library:** Auth.js (NextAuth) with a Postgres adapter, self-hosted (no external
   auth SaaS, consistent with Stage 1).
