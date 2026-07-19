@@ -10,7 +10,7 @@ import NavBar from "@/components/NavBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Game Rating Lists",
+  title: "Games",
   description: "Your favorite friends' favorite games",
 };
 

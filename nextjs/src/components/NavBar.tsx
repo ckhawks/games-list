@@ -8,7 +8,7 @@ export default function NavBar() {
     <nav className={styles["nav"]}>
       <div className={styles["inner"]}>
         <Link href="/" className={styles["brand"]}>
-          Game Rating Lists
+          Games
         </Link>
         <div className={styles["right"]}>
           <ThemeToggle />

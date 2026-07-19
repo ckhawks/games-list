@@ -173,6 +173,7 @@ Now it feels like a product rather than one person's page.
 | 6 — Scale/polish | ongoing | — |
 
 ## Decisions made
+- **Name / domain:** brand is "Games"; production site lives at `games.stlr.cx`.
 - **Storage:** keep S3.
 - **Auth:** Steam OpenID (via `STEAMWEB_API_KEY` for profile fetch).
 - **Lists:** one list per user (`ownerUserId` on `Player`; no separate `List` table).
