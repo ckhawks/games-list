@@ -1,15 +1,19 @@
 require("dotenv").config();
 import { Pool } from "pg";
 
-// Standard Postgres pool — works against Neon today and the VPS Postgres after
-// the migration, just by changing DATABASE_URL. This CLI is short-lived, so a
-// single shared pool is fine; call closeDb() before exit if the process hangs.
-const connectionString = process.env.DATABASE_URL || "";
-const needsSsl = /sslmode=(require|verify)/.test(connectionString);
+// Standard Postgres pool. This CLI is short-lived, so a single shared pool is
+// fine; call closeDb() before exit if the process hangs. SSL handling mirrors
+// the Next app (see nextjs/src/util/db/db.ts): strip sslmode and drive SSL here,
+// accepting a self-signed server cert so a networked connection stays encrypted.
+const raw = process.env.DATABASE_URL || "";
+const wantSsl = /sslmode=(require|prefer|verify)/i.test(raw);
+const connectionString = raw
+  .replace(/([?&])sslmode=[^&]*&?/i, "$1")
+  .replace(/[?&]$/, "");
 
 const pool = new Pool({
   connectionString,
-  ssl: needsSsl ? { rejectUnauthorized: true } : undefined,
+  ssl: wantSsl ? { rejectUnauthorized: false } : undefined,
 });
 
 export async function db(query: string, params: any[] = []) {
