@@ -255,6 +255,11 @@ body {
   &.grey {
     color: var(--badge-grey-color);
     background-color: var(--badge-grey-light-color);
+    &.outline {
+      border: 1px solid var(--badge-grey-light-color);
+      background-color: var(--background-color);
+      // color:
+    }
   }
 
   &.blue {
