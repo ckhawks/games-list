@@ -103,7 +103,15 @@ username/slug before the Player is created. (Built in Stage 3 alongside the edit
 
 ---
 
-## Stage 3 — Self-serve data entry (retire the `acquire` CLI)
+## Stage 3 — Editing & self-serve data entry (retire the `acquire` CLI)
+
+**Status:** slice 1 (edit my list) built — owner-only inline editing on the `[username]`
+page. `GameEditor` client component (Edit toggle → rating/hours/review + remove), backed by
+`updatePlayerGame` / `removePlayerGame` server actions that re-check ownership server-side.
+A "Your list" badge marks the owner's own page. Reorder deferred (list is rating-sorted, so
+changing a rating already reorders). Remaining slices: add-a-game (Steam import + manual),
+new-user onboarding.
+
 
 Right now, adding a game = running a local TS script with your personal Steam token. Real
 users can't do that. The scraping logic has to move server-side.

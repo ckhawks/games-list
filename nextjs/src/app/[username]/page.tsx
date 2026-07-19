@@ -9,6 +9,8 @@ import FooterBar from "@/components/FooterBar";
 import { ListFilters } from "@/components/ListFilters";
 import { Metadata } from "next";
 import NoSsr from "@/components/NoSsr";
+import { currentUserOwnsPlayer } from "@/util/auth/ownership";
+import GameEditor from "@/components/GameEditor";
 
 export const revalidate = 60;
 
@@ -76,11 +78,13 @@ export default async function PlayerListPage({
   }
 
   const player = playerSearch[0];
+  const isOwner = await currentUserOwnsPlayer(player.id);
 
   const games = await db(
     `
-      SELECT 
+      SELECT
           g.id,
+          pg.id AS "playerGameId",
           g.name,
           g."storeURL",
           g."storeName",
@@ -107,7 +111,7 @@ export default async function PlayerListPage({
           AND pg."deletedAt" IS NULL
           AND g."deletedAt" IS NULL
       GROUP BY
-          g.id, pg.rating, pg."reviewBlurb", pg."hoursPlayed", pg."createdAt"
+          g.id, pg.id, pg.rating, pg."reviewBlurb", pg."hoursPlayed", pg."createdAt"
       ORDER BY 
           pg.rating DESC, pg."createdAt" DESC;
     `,
@@ -122,6 +126,7 @@ export default async function PlayerListPage({
             <BackButton to="/" text={"Back"} />
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               <h1>{player.username}&apos;s Games</h1>
+              {isOwner && <span className={"badge blue small"}>Your list</span>}
               <span style={{ color: "var(--sub-text-color)" }}>
                 Last updated {getTimeString(player.listLastUpdatedAt)}
               </span>
@@ -254,6 +259,16 @@ export default async function PlayerListPage({
                       {game.reviewBlurb && (
                         <div className={styles["game-list-bottom"]}>
                           <i>&quot;{game.reviewBlurb}&quot;</i>
+                        </div>
+                      )}
+                      {isOwner && (
+                        <div className={styles["game-list-bottom"]}>
+                          <GameEditor
+                            playerGameId={game.playerGameId}
+                            rating={game.rating}
+                            hoursPlayed={game.hoursPlayed}
+                            reviewBlurb={game.reviewBlurb}
+                          />
                         </div>
                       )}
                     </div>
