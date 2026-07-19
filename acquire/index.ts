@@ -20,7 +20,8 @@ import { tags } from "../nextjs/src/constants/tags";
 // https://steamapi.xpaw.me/#IStoreBrowseService/GetItems
 // https://steamdb.info/app/427520/subs/
 
-// https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?access_token=eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInI6MTcxQl8yNDkzRTBEQ19DMjJERCIsICJzdWIiOiAiNzY1NjExOTgwMTQyNjE0MTAiLCAiYXVkIjogWyAid2ViOnN0b3JlIiBdLCAiZXhwIjogMTcyNDI4NjY2MCwgIm5iZiI6IDE3MTU1NTk5NjMsICJpYXQiOiAxNzI0MTk5OTYzLCAianRpIjogIjBGMkNfMjRFRUJENjhfMEYzQjEiLCAib2F0IjogMTcxODQxODE0NiwgInJ0X2V4cCI6IDE3MzY4MjAyMTQsICJwZXIiOiAwLCAiaXBfc3ViamVjdCI6ICI3Ni4yNTEuMTY3LjIwNSIsICJpcF9jb25maXJtZXIiOiAiNzYuMjUxLjE2Ny4yMDUiIH0.J7imU0NagVtwJ0HgbwwlzpVE0TaotcKFIK4pbyj3voR_PWOIfP_3b4yv0d7Kcexv7vnghxEFf47cTER7HbzoBg&input_json=%7B%22ids%22%3A%5B%7B%22appid%22%3A%22427520%22%7D%5D%2C%22context%22%3A%7B%22language%22%3A%22en%22%2C%22country_code%22%3A%22us%22%7D%2C%22data_request%22%3A%7B%22include_screenshots%22%3Atrue%2C%22include_tag_count%22%3A%2232%22%2C%22include_basic_info%22%3Atrue%7D%7D
+// GetItems is called via getStoreItemDataForAppId() below. The access_token
+// comes from process.env.STEAM_STORE_ACCESS_TOKEN — never hardcode it here.
 
 const getStoreItemsURL =
   "https://api.steampowered.com/IStoreBrowseService/GetItems/v1/";

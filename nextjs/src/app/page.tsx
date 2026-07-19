@@ -1,70 +1,9 @@
-"use server";
-
 import styles from "./page.module.scss";
-import ThemeToggle from "@/components/ThemeToggle";
 import { Col, Row } from "react-bootstrap";
 import { ArrowRight } from "react-feather";
 import Link from "next/link";
 import { db } from "@/util/db/db";
-import { getTag } from "@/constants/tags";
 import FooterBar from "@/components/FooterBar";
-
-// const players = [
-//   {
-//     username: "Stellaric",
-//     avatarS3Key: "/avatars/stellaric.png",
-//     tags: [
-//       {
-//         name: "Automation",
-//       },
-//       {
-//         name: "Base-building",
-//       },
-//       {
-//         name: "Competitive",
-//       },
-//       {
-//         name: "First-person Shooter",
-//       },
-//     ],
-//   },
-//   {
-//     username: "Nrohgnol",
-//     avatarS3Key: "/avatars/nrohgnol.jpeg",
-//     tags: [
-//       {
-//         name: "Automation",
-//       },
-//       {
-//         name: "Base-building",
-//       },
-//       {
-//         name: "Competitive",
-//       },
-//       {
-//         name: "First-person Shooter",
-//       },
-//     ],
-//   },
-//   {
-//     username: "DeadNotSleeping",
-//     avatarS3Key: "/avatars/deadnotsleeping.jpeg",
-//     tags: [
-//       {
-//         name: "Automation",
-//       },
-//       {
-//         name: "Base-building",
-//       },
-//       {
-//         name: "Competitive",
-//       },
-//       {
-//         name: "First-person Shooter",
-//       },
-//     ],
-//   },
-// ];
 
 export default async function HomePlayerList() {
   const playersUnsorted = await db(

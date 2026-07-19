@@ -1,79 +1,32 @@
-"use server";
-
 import { Image, Row } from "react-bootstrap";
 import styles from "../page.module.scss";
 import BackButton from "@/components/BackButton";
 import Link from "next/link";
-import { Clock, ExternalLink, ShoppingCart, Star } from "react-feather";
+import { ExternalLink, Star } from "react-feather";
 import { db } from "@/util/db/db";
 import { redirect } from "next/navigation";
 import FooterBar from "@/components/FooterBar";
 import { ListFilters } from "@/components/ListFilters";
-import Head from "next/head";
 import { Metadata } from "next";
 
-const player = {
-  username: "Stellaric",
-  listLastUpdatedAt: "August 19, 2024",
-  profileBlurb: `Welcome to my games page. I&apos;m pretty specific with my games, but there&apos;s two, maybe three main categories that they fall under:
-  <ul><li>Sandbox-y building crafting games</li>
-  <li>Competitive fast mechanical-gameplay games</li>
-  <li>Casual fun with friends party-esque games</li>
-  </ul>
+function getTimeString(date: Date | string | null | undefined): string {
+  if (!date) return "Unknown";
 
-  I&apos;m also pretty bad at categorizing and rating and trying to be objective... so take my numbers with a grain of salt. If I have a lot of hours ins something, I probably enjoy it.`,
-  games: [
-    {
-      name: "Factorio",
-      rating: 10,
-      storeURL: "",
-      storeName: "Steam",
-      releaseDate: "March 23, 2020",
-      artworkS3Key: "games/factorio.jpg",
-      estimatedCopiesSold: 4080000,
-      hoursPlayed: 603,
-      reviewBlurb:
-        "I enjoyed this game a lot. I love doing the factories and making the bots and cutting down the trees with my flamethrower. It’s pretty awesome honestly.",
-      tags: [
-        {
-          name: "Automation",
-        },
-        {
-          name: "Base-building",
-        },
-        {
-          name: "Crafting",
-        },
-        {
-          name: "Management",
-        },
-      ],
-      ratings: [
-        {
-          name: "Steam",
-          rating: 96,
-        },
-        {
-          name: "Metacritic",
-          rating: 56,
-        },
-      ],
-    },
-  ],
-};
+  // Neon returns timestamps as strings, so always coerce (this also clones a
+  // Date argument, so the setHours below never mutates the caller's value).
+  const parsed = new Date(date);
+  if (isNaN(parsed.getTime())) return "Unknown";
 
-function getTimeString(date: Date): string {
   const options = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-    hours: "",
   };
 
   const hours = 5;
-  date.setHours(date.getHours() - hours);
-  return date.toLocaleDateString("en-US", options as unknown as any);
+  parsed.setHours(parsed.getHours() - hours);
+  return parsed.toLocaleDateString("en-US", options as unknown as any);
 }
 
 export async function generateMetadata({
@@ -85,7 +38,7 @@ export async function generateMetadata({
     `
     SELECT * FROM "Player"
     WHERE LOWER(username) = $1`,
-    [params.username]
+    [params.username.toLowerCase()]
   );
 
   let username = params.username;
@@ -111,7 +64,7 @@ export default async function PlayerListPage({
     `
     SELECT * FROM "Player"
     WHERE LOWER(username) = $1`,
-    [params.username]
+    [params.username.toLowerCase()]
   );
 
   if (playerSearch.length != 1) {
@@ -136,29 +89,27 @@ export default async function PlayerListPage({
           pg."hoursPlayed",
           g."steamReviewPercent",
           pg."createdAt" AS "ratingDate",
-          ARRAY_AGG(t.name ORDER BY gt.weight DESC) AS "tags"
-      FROM 
+          ARRAY_AGG(t.name ORDER BY gt.weight DESC)
+            FILTER (WHERE t.name IS NOT NULL) AS "tags"
+      FROM
           "PlayerGame" pg
-      JOIN 
+      JOIN
           "Game" g ON g.id = pg."gameId"
-      LEFT JOIN 
-          "GameTag" gt ON gt."gameId" = g.id
-      LEFT JOIN 
-          "Tag" t ON t.id = gt."tagId"
-      WHERE 
+      LEFT JOIN
+          "GameTag" gt ON gt."gameId" = g.id AND gt."deletedAt" IS NULL
+      LEFT JOIN
+          "Tag" t ON t.id = gt."tagId" AND t."deletedAt" IS NULL
+      WHERE
           pg."playerId" = $1
           AND pg."deletedAt" IS NULL
           AND g."deletedAt" IS NULL
-          AND gt."deletedAt" IS NULL
-          AND t."deletedAt" IS NULL
-      GROUP BY 
+      GROUP BY
           g.id, pg.rating, pg."reviewBlurb", pg."hoursPlayed", pg."createdAt"
       ORDER BY 
           pg.rating DESC, pg."createdAt" DESC;
     `,
     [playerSearch[0].id]
   );
-  console.log(games);
 
   return (
     <>
