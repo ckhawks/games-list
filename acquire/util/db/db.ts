@@ -1,13 +1,22 @@
 require("dotenv").config();
-const { neon } = require("@neondatabase/serverless");
+import { Pool } from "pg";
 
-export async function db(query: string, params: string[]) {
-  // set up database connection
-  const sql = neon(process.env.DATABASE_URL);
+// Standard Postgres pool — works against Neon today and the VPS Postgres after
+// the migration, just by changing DATABASE_URL. This CLI is short-lived, so a
+// single shared pool is fine; call closeDb() before exit if the process hangs.
+const connectionString = process.env.DATABASE_URL || "";
+const needsSsl = /sslmode=(require|verify)/.test(connectionString);
 
-  // run the query and save the response rows
-  const response = await sql(query, params);
+const pool = new Pool({
+  connectionString,
+  ssl: needsSsl ? { rejectUnauthorized: true } : undefined,
+});
 
-  // return the response
-  return response;
+export async function db(query: string, params: any[] = []) {
+  const result = await pool.query(query, params);
+  return result.rows;
+}
+
+export async function closeDb() {
+  await pool.end();
 }

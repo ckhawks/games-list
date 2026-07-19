@@ -29,13 +29,18 @@ closed before Stage 2 opens signups):
 Do this first: it's independent of the platform work and de-risks everything after it
 (no more managed-service lock-in, no cold starts, one box to reason about).
 
-**The one real code change — the DB driver.**
-`@neondatabase/serverless` talks to Neon over HTTP/WebSocket and will **not** work against
-a vanilla Postgres instance. Swap it for a standard driver:
-- Recommended: `postgres` (postgres.js) or `pg` (node-postgres) with a shared pool.
-- `src/util/db/db.ts` is the only place that imports neon — this is a ~10-line change,
-  but the `sql(query, params)` call signature differs, so test every query path.
-- `acquire/util/db/db.ts` needs the same swap.
+**The one real code change — the DB driver. ✅ DONE (verified against Neon).**
+`@neondatabase/serverless` talked to Neon over HTTP/WebSocket and would not work against a
+vanilla Postgres instance. Swapped both `db.ts` files to `pg` (node-postgres) with a shared
+pool; `@neondatabase/serverless` removed from both `package.json`s. Verified: `pg` connects
+to the existing Neon URL, all queries (incl. the `ARRAY_AGG ... FILTER` games query) return
+correct shapes, `next build` passes. So the app runs unchanged today and will point at the
+VPS Postgres just by changing `DATABASE_URL`.
+- **SSL caveat for the VPS:** `db.ts` enables SSL only when the connection string contains
+  `sslmode=require`/`verify`, with `rejectUnauthorized: true`. Local VPS Postgres over
+  `localhost` needs no SSL (leave `sslmode` out → plain connection, works). If you instead
+  connect over the network with a **self-signed** cert, `rejectUnauthorized: true` will
+  reject it — either install a real cert or relax that flag for that host.
 
 **Hosting Next.js on the VPS:**
 - Set `output: "standalone"` in `next.config.mjs` for a lean deploy bundle.
@@ -152,7 +157,9 @@ Now it feels like a product rather than one person's page.
 ## Decisions made
 - **Storage:** keep S3.
 - **Auth:** Steam OpenID (via `STEAMWEB_API_KEY` for profile fetch).
+- **Lists:** one list per user (`ownerUserId` on `Player`; no separate `List` table).
+- **Games:** must support non-Steam / manually-entered games (with manually-sourced
+  artwork), so the "add game" flow needs a manual-entry path alongside Steam import.
 
 ## Open questions
-- One list per user, or multiple lists per user? (Affects the Stage-2 schema.)
-- Is data entry Steam-only, or should manual/non-Steam games be supported?
+- _(none currently — revisit as stages land)_
