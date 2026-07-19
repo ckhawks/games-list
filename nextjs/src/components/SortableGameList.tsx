@@ -130,6 +130,20 @@ export default function SortableGameList({
   const snapshot = useRef<Items | null>(null);
   const [, startTransition] = useTransition();
 
+  // Re-sync from the server whenever the underlying data changes (e.g. editing a
+  // rating via the inline form moves a game to a new tier). A drag's own save
+  // round-trips to the same arrangement, so this causes no visual jump there.
+  const signature = useMemo(
+    () => games.map((g) => `${g.playerGameId}:${g.rating}:${g.order}`).join("|"),
+    [games]
+  );
+  const [prevSignature, setPrevSignature] = useState(signature);
+  if (signature !== prevSignature) {
+    setPrevSignature(signature);
+    setItems(buildItems(games));
+    setActiveId(null);
+  }
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })

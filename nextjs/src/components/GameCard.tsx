@@ -11,6 +11,7 @@ export type GameRow = {
   playerGameId: string;
   name: string;
   rating: number | null;
+  order: number | null;
   storeURL: string | null;
   storeName: string | null;
   releaseDate: string | Date | null;
