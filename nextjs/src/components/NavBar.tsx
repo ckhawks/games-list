@@ -6,12 +6,14 @@ import AuthControl from "./AuthControl";
 export default function NavBar() {
   return (
     <nav className={styles["nav"]}>
-      <Link href="/" className={styles["brand"]}>
-        Game Rating Lists
-      </Link>
-      <div className={styles["right"]}>
-        <ThemeToggle />
-        <AuthControl />
+      <div className={styles["inner"]}>
+        <Link href="/" className={styles["brand"]}>
+          Game Rating Lists
+        </Link>
+        <div className={styles["right"]}>
+          <ThemeToggle />
+          <AuthControl />
+        </div>
       </div>
     </nav>
   );
