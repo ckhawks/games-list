@@ -62,6 +62,46 @@ export async function updatePlayerGame(formData: FormData) {
   await touchList(username);
 }
 
+export async function reorderGames(payload: {
+  username: string;
+  items: { playerGameId: string; rating: number; order: number }[];
+}) {
+  const session = await getSession();
+  if (!session) throw new Error("Not signed in");
+
+  const { username, items } = payload;
+  if (!items.length) return;
+
+  // Resolve the list the user actually owns; scope every update to it so a
+  // tampered id can never touch another player's rows.
+  const owned = await db(
+    `SELECT id FROM "Player" WHERE LOWER("username") = $1 AND "ownerUserId" = $2`,
+    [username.toLowerCase(), session.userId]
+  );
+  const playerId = owned[0]?.id as string | undefined;
+  if (!playerId) throw new Error("Not authorized to edit this list");
+
+  const values: string[] = [];
+  const params: any[] = [playerId];
+  for (const it of items) {
+    const rating = Math.min(10, Math.max(0, Math.trunc(Number(it.rating))));
+    const order = Math.trunc(Number(it.order));
+    if (Number.isNaN(rating) || Number.isNaN(order)) throw new Error("Bad payload");
+    params.push(it.playerGameId, rating, order);
+    const b = params.length - 2;
+    values.push(`($${b}::uuid, $${b + 1}::int, $${b + 2}::int)`);
+  }
+
+  await db(
+    `UPDATE "PlayerGame" AS pg
+     SET "rating" = v.rating, "order" = v.ord
+     FROM (VALUES ${values.join(", ")}) AS v(id, rating, ord)
+     WHERE pg.id = v.id AND pg."playerId" = $1 AND pg."deletedAt" IS NULL`,
+    params
+  );
+  await touchList(username);
+}
+
 export async function removePlayerGame(formData: FormData) {
   const session = await getSession();
   if (!session) throw new Error("Not signed in");

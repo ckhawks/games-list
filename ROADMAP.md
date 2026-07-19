@@ -105,12 +105,17 @@ username/slug before the Player is created. (Built in Stage 3 alongside the edit
 
 ## Stage 3 — Editing & self-serve data entry (retire the `acquire` CLI)
 
-**Status:** slice 1 (edit my list) built — owner-only inline editing on the `[username]`
-page. `GameEditor` client component (Edit toggle → rating/hours/review + remove), backed by
-`updatePlayerGame` / `removePlayerGame` server actions that re-check ownership server-side.
-A "Your list" badge marks the owner's own page. Reorder deferred (list is rating-sorted, so
-changing a rating already reorders). Remaining slices: add-a-game (Steam import + manual),
-new-user onboarding.
+**Status:** slice 1 (edit my list) built — owner-only editing on the `[username]` page.
+- Inline `GameEditor` (Edit toggle → rating/hours/review + remove), via `updatePlayerGame` /
+  `removePlayerGame` server actions that re-check ownership server-side.
+- **Drag-and-drop reorder (tier model):** the list groups into rating tiers; the owner drags
+  a game to reorder within its tier, or into another tier to re-rate it. `@dnd-kit`
+  multi-container; `PlayerGame.order` re-seeded to per-tier sequences; `reorderGames` server
+  action persists rating+order in one ownership-scoped update. Display sorts by
+  `rating DESC, "order" ASC`. `GameCard` is shared between the static and draggable lists.
+- A "My list" nav link + "Your list" badge help owners find and recognize their page.
+
+Remaining slices: add-a-game (Steam import + manual entry), new-user onboarding.
 
 
 Right now, adding a game = running a local TS script with your personal Steam token. Real

@@ -1,0 +1,79 @@
+.tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tier {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tier-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 16px;
+  color: #fff;
+  background: var(--accent-dark-color);
+}
+
+.tier-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 8px;
+}
+
+.empty-tier {
+  padding: 12px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  color: var(--sub-text-color);
+  font-size: 13px;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  color: var(--sub-text-color);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: grab;
+  touch-action: none;
+
+  &:hover {
+    color: var(--text-color);
+    background: var(--hover-background-color);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.card {
+  flex: 1;
+  min-width: 0;
+}
+
+.overlay {
+  cursor: grabbing;
+  box-shadow: 0 8px 24px var(--box-shadow-color);
+  border-radius: 8px;
+}
