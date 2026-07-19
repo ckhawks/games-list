@@ -77,9 +77,11 @@ Steam is OpenID 2.0, which Auth.js models poorly; Steam is our only provider). B
 - Auto-claim: on login, an unowned Player whose `steamId64` matches is linked to the user.
   All 7 existing players have SteamIDs backfilled, so each is claimable by its owner.
 
-**Remaining in Stage 2:** end-to-end browser login test; decide whether new (non-matching)
-logins should auto-create an empty Player or land on a "set up your list" screen (ties into
-Stage 3).
+**Remaining in Stage 2:** end-to-end browser login test.
+
+**New-user flow (decided):** a Steam login with no matching Player logs in but does NOT
+auto-create a list — instead the user hits a "set up your list" onboarding screen to pick a
+username/slug before the Player is created. (Built in Stage 3 alongside the editing UI.)
 
 - **Auth library:** Auth.js (NextAuth) with a Postgres adapter, self-hosted (no external
   auth SaaS, consistent with Stage 1).

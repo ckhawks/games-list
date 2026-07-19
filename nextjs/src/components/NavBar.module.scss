@@ -1,0 +1,30 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--full-background-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-color);
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--accent-dark-color);
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

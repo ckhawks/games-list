@@ -5,7 +5,7 @@ import "./globals.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LightThemeProvider } from "./contexts/LightThemeContext";
 import { getInitialLightTheme } from "./contexts/getInitialLightTheme";
-import AuthControl from "@/components/AuthControl";
+import NavBar from "@/components/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <LightThemeProvider initialTheme={initialTheme}>
-          <AuthControl />
+          <NavBar />
           {children}
         </LightThemeProvider>
       </body>
