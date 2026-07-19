@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { db } from "./util/db/db";
+import { db, closeDb } from "./util/db/db";
 
 import * as fs from "fs";
 import * as path from "path";
@@ -486,11 +486,16 @@ async function writeGamePlayerRelationships() {
 }
 
 async function run() {
-  await getAppIdsFromRatingsFile();
-  // appIds = appIds.slice(0, 3); // only take the first 3 games off the appIds list
-  await getStoreInfoForAllAppIds();
-  await writeNonSteamGamesToGameTable(); // Write the non-steam games to the database
-  await writeGamePlayerRelationships();
+  try {
+    await getAppIdsFromRatingsFile();
+    // appIds = appIds.slice(0, 3); // only take the first 3 games off the appIds list
+    await getStoreInfoForAllAppIds();
+    await writeNonSteamGamesToGameTable(); // Write the non-steam games to the database
+    await writeGamePlayerRelationships();
+  } finally {
+    // The pg pool keeps the process alive; close it so the CLI exits cleanly.
+    await closeDb();
+  }
 }
 
 run();
