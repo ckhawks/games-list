@@ -58,6 +58,7 @@ export default async function HomePlayerList() {
           SELECT ARRAY_AGG(jsonb_build_object('name', wt2.tag_name, 'weight', wt2.total_weight) ORDER BY wt2.total_weight DESC)
           FROM WeightedTags wt2
           WHERE wt2.player_id = pgt.player_id AND wt2.rank <= 7
+            AND wt2.tag_name IS NOT NULL
       ) AS top_tags
   FROM 
       PlayerGameTags pgt
